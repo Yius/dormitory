@@ -34,6 +34,7 @@ public class ManagerSignUpActivity extends AppCompatActivity {
     private Button bt_newSign;
     private Button bt_situation;
     private Animation myAnimation;
+    private Button loca;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,7 @@ public class ManagerSignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_manager_sign_up);
         bt_newSign = findViewById(R.id.bt_newSign);
         bt_situation = findViewById(R.id.bt_situation);
+        loca = findViewById(R.id.loca);
         Toolbar toolbar = findViewById(R.id.toolbar_sign);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -52,6 +54,7 @@ public class ManagerSignUpActivity extends AppCompatActivity {
         OnClick onClick = new OnClick();
         bt_newSign.setOnClickListener(onClick);
         bt_situation.setOnClickListener(onClick);
+        loca.setOnClickListener(onClick);
     }
 
 
@@ -70,6 +73,8 @@ public class ManagerSignUpActivity extends AppCompatActivity {
                     v.startAnimation(myAnimation);
                     startActivity(new Intent(ManagerSignUpActivity.this,SignRecordSituationActivity.class));
                     break;
+                case R.id.loca:
+                    startActivity(new Intent(ManagerSignUpActivity.this,MainActivity.class));
                 default:
                     break;
             }
