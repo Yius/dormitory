@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/timg2">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_announce"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#007FFF"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="160dp"
+        android:gravity="center"
+        android:text="标题:"
+        android:textSize="18sp"/>
+
+    <EditText
+        android:id="@+id/et_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_toRightOf="@id/title"
+        android:layout_marginTop="160dp"
+        android:layout_marginRight="15dp"
+        android:inputType="text"
+        android:gravity="center"
+        android:hint="不能为空" />
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/title"
+        android:gravity="center"
+        android:text="内容:"
+        android:textSize="18sp"/>
+
+    <EditText
+        android:id="@+id/et_content"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_below="@id/content"
+        android:inputType="textMultiLine"
+        android:scrollbars="vertical"
+        android:background="@drawable/edittext_selector"
+        android:hint="不能为空"
+        android:gravity="top"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
+
+    <TextView
+        android:id="@+id/tv_announce"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:drawableLeft="@drawable/ic_announce"
+        android:text="发布"
+        android:clickable="true"
+        android:textSize="18sp"/>
+
+</RelativeLayout>

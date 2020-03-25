@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:titleTextColor="#fff"
+        android:fitsSystemWindows="true"/>
+
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"
+        android:elevation="3dp"
+        android:background="@drawable/round_layout"
+        >
+
+        <TextView
+            android:id="@+id/tv_signdetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="签到信息详情"
+            android:layout_centerHorizontal="true"
+            android:textSize="40dp"/>
+    </RelativeLayout>
+
+    <com.xuexiang.xui.widget.button.shadowbutton.ShadowButton
+        android:id="@+id/sign"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="400dp"
+        android:background="@drawable/button_main2"
+        app:sb_shape_type="round"
+        android:gravity="center"
+        android:textSize="40dp"
+        android:text="签到">
+
+    </com.xuexiang.xui.widget.button.shadowbutton.ShadowButton>
+</RelativeLayout>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="6dp"
+    app:cardCornerRadius="6dp"
+    app:cardBackgroundColor="#F8F8FF">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <TextView
+            android:id="@+id/tv_applyID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="无"
+            android:paddingLeft="4dp"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/tv_repairName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/tv_applyID"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text="无"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/tv_dormID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:text="无"
+            android:paddingLeft="4dp"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/tv_applyDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:text="yyyy-MM-dd HH:mm::ss"
+            android:paddingRight="5dp"
+            android:textSize="15sp"/>
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

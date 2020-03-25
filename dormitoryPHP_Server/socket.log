@@ -1,0 +1,6 @@
+nohup: ignoring input
+PHP Warning:  socket_select(): unable to select [4]: Interrupted system call in /www/wwwroot/47.115.36.6/dormitoryPHP/server.php on line 29
+
+Warning: socket_select(): unable to select [4]: Interrupted system call in /www/wwwroot/47.115.36.6/dormitoryPHP/server.php on line 29
+client connect server: ip = 112.97.214.184, port = 15201
+client close

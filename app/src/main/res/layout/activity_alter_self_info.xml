@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/timg">
+
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/alter_self_info_toolbar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="?attr/actionBarSize"-->
+<!--        android:background="?attr/colorPrimary"-->
+<!--        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"-->
+<!--        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />-->
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/alter_self_info_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    </androidx.appcompat.widget.Toolbar>
+
+    <com.xuexiang.xui.widget.imageview.RadiusImageView
+        android:id="@+id/photo"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="90dp"
+        android:src="@drawable/portrait_s"
+        app:riv_border_color="@color/xui_config_color_gray_6"
+        app:riv_is_circle="true"
+        app:riv_selected_border_color="@color/xui_config_color_gray_4"
+        app:riv_selected_border_width="1px"
+        app:riv_selected_mask_color="@color/xui_config_color_gray_8" />
+    <!--注意不能用alignParentBotton-->
+
+    <TextView
+        android:id="@+id/tv_ID"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="250dp"
+        android:gravity="left|center_vertical"
+        android:text="学号:"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/ID"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@id/tv_ID"
+        android:layout_marginLeft="80dp"
+        android:layout_toRightOf="@id/tv_ID"
+        android:gravity="center"
+        android:text="学号"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_below="@+id/tv_ID"
+        android:layout_marginLeft="70dp"
+        android:gravity="center"
+        android:text="姓名:"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@id/tv_name"
+        android:layout_marginLeft="80dp"
+        android:layout_toRightOf="@id/tv_name"
+        android:gravity="center"
+        android:text="姓名"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_below="@id/tv_name"
+        android:layout_marginLeft="70dp"
+        android:gravity="center"
+        android:text="昵称:"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@id/tv_nickname"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@id/tv_nickname"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="昵称"
+        android:inputType="textPersonName" />
+
+
+
+
+
+    <TextView
+        android:id="@+id/tv_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_below="@id/tv_nickname"
+        android:layout_marginLeft="70dp"
+        android:gravity="center"
+        android:text="联系方式:"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/phone"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@id/tv_phone"
+        android:layout_toRightOf="@id/tv_phone"
+        android:layout_marginLeft="15dp"
+        android:ems="10"
+        android:gravity="left"
+        android:hint="联系方式"
+        android:inputType="phone" />
+
+    <TextView
+        android:id="@+id/tv_dormID"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_below="@+id/tv_phone"
+        android:layout_marginLeft="70dp"
+        android:gravity="center"
+        android:text="宿舍号:"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/dormID"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@+id/tv_dormID"
+        android:layout_marginLeft="80dp"
+        android:layout_toRightOf="@id/tv_ID"
+        android:gravity="center"
+        android:text="宿舍号"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="20dp"
+        android:clickable="true"
+        android:text="保存"
+        android:textSize="20dp"
+        android:textColor="@color/xui_config_color_white"/>
+
+    <Button
+        android:id="@+id/select_photo"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginLeft="240dp"
+        android:layout_alignBottom="@+id/photo"
+        android:background="@drawable/photo">
+    </Button>
+
+</RelativeLayout>

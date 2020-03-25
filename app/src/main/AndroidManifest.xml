@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.xin.dormitory">
+
+    <application
+        android:name=".Utility.MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:targetApi="n">
+        <activity android:name=".student.WaterAndElectricityActivity"
+            android:parentActivityName=".student.MainSActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".student.MainSActivity" />
+
+        </activity>
+        <activity android:name=".student.OthersInfoActivity" />
+        <activity android:name=".houseparent.MeHFragment" />
+        <activity android:name=".houseparent.IndexHFragment" />
+        <activity android:name=".houseparent.MainHActivity" />
+        <activity
+            android:name=".student.PersonalInfoActivity"
+            android:parentActivityName=".student.MainSActivity"
+            android:theme="@style/PersonalInfoActivityTheme" />
+        <activity android:name=".common.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".student.PostsSFragment" />
+        <activity android:name=".student.IndexSFragment" />
+        <activity android:name=".student.MainSActivity" />
+        <activity android:name=".common.RegisterActivity" />
+        <activity
+            android:name=".student.AlterSelfInfoActivity"
+            android:label="修改信息"
+            android:launchMode="singleTop"
+            android:parentActivityName=".student.PersonalInfoActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".student.CheckEleAndWaterActivity" />
+        <activity
+            android:name=".student.RepairApplicationActivity"
+            android:label="维修申请"
+            android:launchMode="singleTop"
+            android:parentActivityName=".student.MainSActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".houseparent.ManagerRepairActivity"
+            android:label="管理维修"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".houseparent.ManagerAnnouncementActivity"
+            android:label="公告管理"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".houseparent.CheckStayAndDepartActivity"
+            android:label="离宿/留宿情况"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".houseparent.ManagerSignUpActivity"
+            android:label="签到相关"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".houseparent.UnhandledRepairActivity"
+            android:label="未处理申请"
+            android:launchMode="singleTop"
+            android:parentActivityName=".houseparent.ManagerRepairActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".houseparent.ManagerRepairActivity" />
+        </activity>
+        <activity
+            android:name=".houseparent.HandledRepairActivity"
+            android:label="已处理申请"
+            android:launchMode="singleTop"
+            android:parentActivityName=".houseparent.ManagerRepairActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".houseparent.ManagerRepairActivity" />
+        </activity>
+        <activity
+            android:name=".houseparent.RepairDetailsActivity"
+            android:label="申请详情"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".houseparent.CreateAnnouncementActivity"
+            android:label="发布新公告"
+            android:launchMode="singleTop"
+            android:parentActivityName=".houseparent.ManagerAnnouncementActivity"
+            android:windowSoftInputMode="adjustPan">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".houseparent.ManagerAnnouncementActivity" />
+        </activity>
+        <activity
+            android:name=".houseparent.CheckAnnouncementActivity"
+            android:label="已发布公告"
+            android:launchMode="singleTop"
+            android:parentActivityName=".houseparent.ManagerAnnouncementActivity" />
+        <activity
+            android:name=".student.DepartRegisterActivity"
+            android:label="离宿登记"
+            android:launchMode="singleTop"
+            android:parentActivityName=".student.MainSActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".student.StayRegisterActivity"
+            android:label="留宿登记"
+            android:launchMode="singleTop"
+            android:parentActivityName=".student.MainSActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".houseparent.SelfInfoHActivity"
+            android:label="个人信息"
+            android:launchMode="singleTop"
+            android:parentActivityName=".houseparent.MainHActivity" />
+        <activity
+            android:name=".houseparent.CheckStayStudentsActivity"
+            android:label="留宿信息"
+            android:launchMode="singleTop"
+            android:parentActivityName=".houseparent.CheckStayAndDepartActivity" />
+        <activity
+            android:name=".houseparent.CheckDepartStudentsActivity"
+            android:label="离宿信息"
+            android:launchMode="singleTop"
+            android:parentActivityName=".houseparent.CheckStayAndDepartActivity" />
+        <activity
+            android:name=".houseparent.StayStudentsDetailsActivity"
+            android:label="留宿详情"
+            android:launchMode="singleTop"
+            android:parentActivityName=".houseparent.CheckStayStudentsActivity" />
+        <activity
+            android:name=".houseparent.DepartStudentsDetailsActivity"
+            android:label="离宿详情"
+            android:launchMode="singleTop"
+            android:parentActivityName=".houseparent.CheckDepartStudentsActivity" />
+        <activity
+            android:name=".houseparent.AnnouncementDetailActivity"
+            android:label="公告详情"
+            android:launchMode="singleTop"
+            android:parentActivityName=".houseparent.CheckAnnouncementActivity" />
+        <activity
+            android:name=".student.CheckNoticesActivity"
+            android:label="通知"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".student.CheckAnnouncementNoticesActivity"
+            android:label="公告通知"
+            android:launchMode="singleTop"
+            android:parentActivityName=".student.CheckNoticesActivity" />
+        <activity
+            android:name=".student.CheckSignNoticesActivity"
+            android:label="我的签到"
+            android:launchMode="singleTop"
+            android:parentActivityName=".student.CheckNoticesActivity" />
+        <activity
+            android:name=".student.CheckAnnouncementDetailsActivity"
+            android:label="公告详情"
+            android:launchMode="singleTop"
+            android:parentActivityName=".student.CheckAnnouncementNoticesActivity" />
+        <activity
+            android:name=".houseparent.SignRecordSituationActivity"
+            android:label="签到情况"
+            android:launchMode="singleTop"
+            android:parentActivityName=".houseparent.ManagerSignUpActivity" />
+        <activity
+            android:name=".houseparent.CheckUnsignedStudentsActivity"
+            android:label="未签到学生"
+            android:launchMode="singleTop"
+            android:parentActivityName=".houseparent.SignRecordSituationActivity" />
+        <activity
+            android:name=".student.PostsChatActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".student.PostsSFragment" />
+        <activity
+            android:name=".student.AddPostsActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".student.MainSActivity" />
+        <activity
+            android:name=".student.AddContactsActivity"
+            android:launchMode="singleTop" />
+        <activity android:name=".student.AddContactsHActivity" />
+        <activity
+            android:name=".student.SignDetails"
+            android:label="签到"
+            android:launchMode="singleTop"
+            android:parentActivityName=".student.CheckSignNoticesActivity" />
+        <activity
+            android:name=".student.friends_list.MyFriendsActivity"
+            android:label="我的好友"
+            android:launchMode="singleTop" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.dormitory.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider> <!-- 存储相机拍照内容，需要内容提供器 -->
+        <service
+            android:name=".student.ForegroundService"
+            android:enabled="true"
+            android:exported="true" />
+    </application>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+</manifest>

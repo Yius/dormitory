@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/timg2">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/self_info_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#007FFF"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <!--    <de.hdodenhof.circleimageview.CircleImageView-->
+    <!--        android:id="@+id/photo"-->
+    <!--        android:layout_width="120dp"-->
+    <!--        android:layout_height="120dp"-->
+    <!--        android:layout_below="@id/self_info_toolbar"-->
+    <!--        android:layout_centerHorizontal="true"-->
+    <!--        android:layout_marginTop="60dp"-->
+    <!--        android:background="@drawable/portrait_h" />-->
+    <com.xuexiang.xui.widget.imageview.RadiusImageView
+        android:id="@+id/photo"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="90dp"
+        android:src="@drawable/portrait_h"
+        app:riv_border_color="@color/xui_config_color_gray_6"
+        app:riv_is_circle="true"
+        app:riv_selected_border_color="@color/xui_config_color_gray_4"
+        app:riv_selected_border_width="1px"
+        app:riv_selected_mask_color="@color/xui_config_color_gray_8" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="280dp"
+        android:textSize="20dp"
+        android:text="姓名:" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/name"
+        android:layout_above="@id/space1"
+        android:textSize="20dp"
+        android:ems="6"
+        android:gravity="center"
+        android:hint="无" />
+
+    <!--所有space都是用来填充不同条目间的缝隙-->
+
+    <Space
+        android:id="@+id/space1"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_alignRight="@id/name"
+        android:layout_below="@id/name" />
+
+    <TextView
+        android:id="@+id/govern"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/space1"
+        android:layout_alignRight="@id/name"
+        android:textSize="20dp"
+        android:text="所管宿舍:" />
+
+    <TextView
+        android:id="@+id/tv_govern"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/space1"
+        android:layout_toRightOf="@id/govern"
+        android:textSize="20dp"
+        android:ems="6"
+        android:gravity="center"
+        android:hint="无" />
+
+    <Space
+        android:id="@+id/space2"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_alignRight="@id/govern"
+        android:layout_below="@id/govern" />
+
+    <TextView
+        android:id="@+id/ID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/space2"
+        android:layout_alignRight="@id/name"
+        android:textSize="20dp"
+        android:text="宿管号:" />
+
+    <TextView
+        android:id="@+id/tv_ID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/space2"
+        android:layout_toRightOf="@id/ID"
+        android:textSize="20dp"
+        android:ems="6"
+        android:gravity="center"
+        android:hint="无" />
+
+    <Space
+        android:id="@+id/space3"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_alignRight="@id/ID"
+        android:layout_below="@id/ID" />
+
+    <TextView
+        android:id="@+id/phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/space3"
+        android:layout_alignRight="@id/name"
+        android:textSize="20dp"
+        android:layout_marginTop="10dp"
+        android:text="联系方式:" />
+
+    <EditText
+        android:id="@+id/et_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/space3"
+        android:layout_toRightOf="@id/phone"
+        android:textSize="20dp"
+        android:ems="7"
+        android:gravity="center"
+        android:hint="无" />
+
+    <Space
+        android:id="@+id/space4"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_alignRight="@id/phone"
+        android:layout_below="@id/phone" />
+
+
+    <TextView
+        android:id="@+id/alter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="20dp"
+        android:clickable="true"
+        android:drawableLeft="@drawable/ic_alter"
+        android:text="保存"
+        android:textSize="20dp" />
+    <!--android:drawableLeft:在文字之前加图标-->
+    <Button
+        android:id="@+id/select_photo"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginLeft="240dp"
+        android:layout_alignBottom="@+id/photo"
+        android:background="@drawable/photo">
+    </Button>
+</RelativeLayout>

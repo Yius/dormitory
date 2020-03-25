@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/timg">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_repair"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <TextView
+            android:id="@+id/toolbar_repair_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="维修申请"
+            android:textSize="20sp"
+            android:textColor="#000000"
+            android:layout_centerHorizontal="true" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <Button
+        android:id="@+id/repair_apply_commit"
+        android:layout_width="200dp"
+        android:layout_height="35dp"
+        android:text="提 交"
+        android:textColor="#000000"
+        android:background="@drawable/bg_button01"
+        android:textSize="15sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/et_OtherRemarks"/>
+
+    <TextView
+        android:id="@+id/RepairName"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="维修物件"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="15dp"
+        android:layout_below="@id/toolbar_repair"
+        android:gravity="center" />
+
+    <EditText
+        android:id="@+id/et_RepairName"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/toolbar_repair"
+        android:layout_toRightOf="@id/RepairName"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:hint="不能为空"/>
+
+    <TextView
+        android:id="@+id/DamageCause"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="损坏原因"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:layout_below="@id/RepairName"
+        android:layout_marginLeft="15dp"
+        android:gravity="center"/>
+
+    <EditText
+        android:id="@+id/et_DamageCause"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_toRightOf="@+id/DamageCause"
+        android:layout_below="@+id/et_RepairName"
+        android:layout_marginRight="15dp"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/Details"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="详细描述"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:layout_below="@+id/DamageCause"
+        android:layout_marginLeft="15dp"
+        android:gravity="center"/>
+
+    <!--高度已经限制，故行数限制minLines和maxLines不起作用，已删除-->
+    <EditText
+        android:id="@+id/et_Details"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:inputType="textMultiLine"
+        android:scrollbars="vertical"
+        android:background="@drawable/edittext_selector"
+        android:layout_below="@id/Details"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp" />
+
+    <TextView
+        android:id="@+id/Contact"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="联系方式"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:layout_below="@+id/et_Details"
+        android:layout_marginLeft="15dp"
+        android:gravity="center" />
+
+    <EditText
+        android:id="@+id/et_Contact"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:inputType="phone"
+        android:layout_below="@+id/et_Details"
+        android:layout_toRightOf="@+id/Contact"
+        android:layout_marginRight="15dp"
+        android:gravity="center"
+        android:hint="不能为空"/>
+
+    <TextView
+        android:id="@+id/OtherRemarks"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="其他备注"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:layout_below="@+id/Contact"
+        android:layout_marginLeft="15dp"
+        android:gravity="center"/>
+
+    <EditText
+        android:id="@+id/et_OtherRemarks"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:inputType="textMultiLine"
+        android:scrollbars="vertical"
+        android:background="@drawable/edittext_selector"
+        android:layout_below="@id/OtherRemarks"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp" />
+
+</RelativeLayout>
