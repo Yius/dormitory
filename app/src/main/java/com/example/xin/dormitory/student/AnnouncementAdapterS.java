@@ -47,7 +47,7 @@ public class AnnouncementAdapterS extends RecyclerView.Adapter<AnnouncementAdapt
             mContext = parent.getContext();
         }
         //announcement布局重用了
-        View view = LayoutInflater.from(mContext).inflate(R.layout.announcement,parent,false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.announcement_s,parent,false);
         final AnnouncementAdapterS.ViewHolder holder = new AnnouncementAdapterS.ViewHolder(view);
         holder.check_announcement.setOnClickListener(new View.OnClickListener() {
             @Override

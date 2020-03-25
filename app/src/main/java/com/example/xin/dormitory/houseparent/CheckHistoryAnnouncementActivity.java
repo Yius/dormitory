@@ -1,23 +1,30 @@
 package com.example.xin.dormitory.houseparent;
 
+import android.content.Context;
 import android.content.SharedPreferences;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-import android.widget.Toast;
 
 import com.example.xin.dormitory.R;
 import com.example.xin.dormitory.Utility.HttpUtil;
 import com.example.xin.dormitory.Utility.MyApplication;
+import com.example.xin.dormitory.common.Announcement;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshHeader;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,47 +35,52 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class HandledRepairActivity extends AppCompatActivity {
+public class CheckHistoryAnnouncementActivity extends AppCompatActivity {
 
-    private List<Repair> repairList2 = new ArrayList<>();
-    private RepairAdapter adapter2;
-    private SwipeRefreshLayout swipeRefresh2;
+    private SmartRefreshLayout smartRefresh;
+    private RecyclerView recycleView;
+    private List<Announcement> announcementList = new ArrayList<>();
+    private AnnouncementAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_handled_or_unhandled_repair);
-        inithandledRepair();
-        RecyclerView recyclerView = findViewById(R.id.recycle_view);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        adapter2 = new RepairAdapter(repairList2);
-        recyclerView.setAdapter(adapter2);
+        setContentView(R.layout.activity_check_history_announcement);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        swipeRefresh2 = findViewById(R.id.swipe_refresh);
-        swipeRefresh2.setColorSchemeResources(R.color.colorPrimary);
-        swipeRefresh2.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        smartRefresh = findViewById(R.id.smart_refresh);
+        smartRefresh.setRefreshHeader(getRefreshHeader("BezierCircleHeader"));
+        smartRefresh.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onRefresh() {
-                refreshUnhandledRepairs();
+            public void onRefresh(RefreshLayout refreshLayout) {
+                refreshAnnoucements();
             }
         });
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recycleView = findViewById(R.id.recycle_view);
+        recycleView.setLayoutManager(layoutManager);
+        adapter = new AnnouncementAdapter(announcementList);
+        recycleView.setAdapter(adapter);
+
+        initAnnouncements();
     }
 
     /**
-     * 初始化显示的未处理修理申请
+     * 初始化显示历史通知
      */
-    private void inithandledRepair(){
-        repairList2.clear();
+    private void initAnnouncements(){
+        announcementList.clear();
 
+        //学生可以接受属于这栋楼的公告，而宿管只能看自己发布的公告
         SharedPreferences pref = getSharedPreferences("dataH",MODE_PRIVATE);
         OkHttpClient client = new OkHttpClient();
-        RequestBody requestBody = new FormBody.Builder().add("which","1").add("govern",pref.getString("govern","")).build();
+        RequestBody requestBody = new FormBody.Builder().add("houseparentID",pref.getString("ID","")).build();
         //服务器地址，ip地址需要时常更换
-        String address=HttpUtil.address+"handleRepairInfo.php";
+        String address=HttpUtil.address+"checkAnnouncementInfo.php";
         Request request = new Request.Builder().url(address).post(requestBody).build();
         //匿名内部类实现回调接口
         client.newCall(request).enqueue(new okhttp3.Callback(){
@@ -91,13 +103,13 @@ public class HandledRepairActivity extends AppCompatActivity {
                     JSONArray jsonArray = new JSONArray(responseData);
                     for(int i=0;i<jsonArray.length();++i){
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        repairList2.add(new Repair(jsonObject));
+                        announcementList.add(new Announcement(jsonObject));
                     }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             //通知数据改变，涉及UI变化，故在runOnUiThread中操作
-                            adapter2.notifyDataSetChanged();
+                            adapter.notifyDataSetChanged();
                         }
                     });
                 } catch (JSONException e) {
@@ -114,7 +126,7 @@ public class HandledRepairActivity extends AppCompatActivity {
     }
 
 
-    private void refreshUnhandledRepairs(){
+    public void refreshAnnoucements(){
         //网络操作耗时，故开子线程
         new Thread(new Runnable() {
             @Override
@@ -122,11 +134,24 @@ public class HandledRepairActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        inithandledRepair();
-                        swipeRefresh2.setRefreshing(false);
+                        initAnnouncements();
+                        smartRefresh.finishRefresh();
                     }
                 });
             }
         }).start();
     }
+
+
+    private RefreshHeader getRefreshHeader(String name) {
+        try {
+            Class<?> headerClass = Class.forName("com.scwang.smartrefresh.header." + name);
+            Constructor<?> constructor = headerClass.getConstructor(Context.class);
+            return  (RefreshHeader) constructor.newInstance(MyApplication.getContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

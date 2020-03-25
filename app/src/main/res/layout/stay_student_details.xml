@@ -2,26 +2,28 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/timg2">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_details"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#007FFF"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-    </androidx.appcompat.widget.Toolbar>
-
+    <TextView
+        android:id="@+id/label_registerDate"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginRight="15dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:layout_toLeftOf="@id/tv_registerDate"
+        android:textColor="#000000"
+        android:text="提交日期:"/>
     <TextView
         android:id="@+id/tv_registerDate"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_below="@id/toolbar_details"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginRight="15dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
         android:gravity="center"
         android:textSize="16sp"
         android:text="yyyy-MM-dd HH:mm::ss"/>
@@ -33,19 +35,15 @@
         android:text="所在宿舍:"
         android:textSize="18sp"
         android:textColor="#000000"
-        android:layout_marginTop="50dp"
         android:layout_marginLeft="15dp"
-        android:layout_below="@id/toolbar_details"
         android:gravity="center" />
 
     <TextView
         android:id="@+id/tv_dormID"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_below="@id/toolbar_details"
         android:layout_toRightOf="@id/dormID"
         android:layout_marginRight="15dp"
-        android:layout_marginTop="50dp"
         android:gravity="center"
         android:textSize="18sp"
         android:text="无"/>
@@ -59,7 +57,8 @@
         android:textColor="#000000"
         android:layout_marginLeft="15dp"
         android:layout_below="@id/dormID"
-        android:gravity="center" />
+        android:gravity="center"
+        android:layout_marginTop="5dp"/>
 
     <TextView
         android:id="@+id/tv_ID"
@@ -70,7 +69,8 @@
         android:layout_marginRight="15dp"
         android:gravity="center"
         android:textSize="18sp"
-        android:text="无"/>
+        android:text="无"
+        android:layout_marginTop="5dp"/>
 
     <TextView
         android:id="@+id/name"
@@ -81,7 +81,8 @@
         android:textColor="#000000"
         android:layout_below="@id/ID"
         android:layout_marginLeft="15dp"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:layout_marginTop="5dp"/>
 
     <TextView
         android:id="@+id/tv_name"
@@ -92,29 +93,8 @@
         android:layout_marginRight="15dp"
         android:gravity="center"
         android:textSize="18sp"
-        android:text="无"/>
-
-    <TextView
-        android:id="@+id/departCause"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="离宿原因:"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        android:layout_below="@id/name"
-        android:layout_marginLeft="15dp"
-        android:gravity="center"/>
-
-    <TextView
-        android:id="@+id/tv_departCause"
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
         android:text="无"
-        android:scrollbars="vertical"
-        android:layout_below="@id/departCause"
-        android:layout_marginLeft="15dp"
-        android:textSize="18sp"
-        android:layout_marginRight="15dp" />
+        android:layout_marginTop="5dp"/>
 
     <TextView
         android:id="@+id/contact"
@@ -123,23 +103,25 @@
         android:text="联系方式:"
         android:textSize="18sp"
         android:textColor="#000000"
-        android:layout_below="@id/tv_departCause"
+        android:layout_below="@id/name"
         android:layout_marginLeft="15dp"
-        android:gravity="center" />
+        android:gravity="center"
+        android:layout_marginTop="5dp"/>
 
     <TextView
         android:id="@+id/tv_contact"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_below="@id/tv_departCause"
+        android:layout_below="@id/name"
         android:layout_toRightOf="@id/contact"
         android:layout_marginRight="15dp"
         android:gravity="center"
         android:textSize="18sp"
-        android:text="无"/>
+        android:text="无"
+        android:layout_marginTop="5dp"/>
 
     <TextView
-        android:id="@+id/departTime"
+        android:id="@+id/startDate"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:text="离宿时间:"
@@ -147,39 +129,43 @@
         android:textSize="18sp"
         android:layout_below="@id/contact"
         android:layout_marginLeft="15dp"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:layout_marginTop="5dp"/>
 
     <TextView
-        android:id="@+id/backTime"
+        android:id="@+id/endDate"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:text="返校时间:"
         android:textColor="#000000"
         android:textSize="18sp"
-        android:layout_below="@id/departTime"
+        android:layout_below="@id/startDate"
         android:layout_marginLeft="15dp"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:layout_marginTop="5dp"/>
 
     <TextView
-        android:id="@+id/tv_departTime"
+        android:id="@+id/tv_startDate"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="yyyy-MM-dd HH:mm::ss"
-        android:layout_toRightOf="@id/departTime"
+        android:layout_toRightOf="@id/startDate"
         android:layout_below="@id/contact"
         android:layout_marginRight="15dp"
         android:gravity="center"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:layout_marginTop="5dp"/>
 
     <TextView
-        android:id="@+id/tv_backTime"
+        android:id="@+id/tv_endDate"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="yyyy-MM-dd HH:mm::ss"
-        android:layout_toRightOf="@id/backTime"
-        android:layout_below="@id/departTime"
+        android:layout_toRightOf="@id/endDate"
+        android:layout_below="@id/startDate"
         android:layout_marginRight="15dp"
         android:gravity="center"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:layout_marginTop="5dp"/>
 
 </RelativeLayout>

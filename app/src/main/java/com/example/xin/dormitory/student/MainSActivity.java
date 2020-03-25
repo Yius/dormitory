@@ -92,9 +92,9 @@ public class MainSActivity extends AppCompatActivity {
     private static final int POSTS = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //下面这句话必须在 super.onCreate()方法前，否则闪退
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
+        //下面这句话必须在 setContentView()方法前，否则闪退
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         StatusBarUtils.translucent(this);
         setContentView(R.layout.activity_main_s);
 

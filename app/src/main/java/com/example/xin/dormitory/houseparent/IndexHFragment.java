@@ -11,15 +11,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.example.xin.dormitory.R;
 import com.example.xin.dormitory.Utility.BottomNavigationBarUtils;
 import com.xuexiang.xui.utils.DensityUtils;
 import com.xuexiang.xui.utils.StatusBarUtils;
 import com.xuexiang.xui.utils.Utils;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 /**
  * 宿管主界面首页面（oyx新加）
@@ -102,16 +102,16 @@ public class IndexHFragment extends Fragment {
             Intent intent = null;
             switch (v.getId()) {
                 case R.id.rl_weixiu_handle:
-                    intent = new Intent(getActivity(), UnhandledRepairActivity.class);
+                    intent = new Intent(getActivity(), RepairActivity.class);
                     break;
                 case R.id.rl_announcement:
-                    intent = new Intent(getActivity(), ManagerAnnouncementActivity.class);
+                    intent = new Intent(getActivity(), DeliverAnnouncementActivity.class);
                     break;
                 case R.id.rl_check_in:
                     intent = new Intent(getActivity(), ManagerSignUpActivity.class);
                     break;
                 case R.id.rl_depart_stay:
-                    intent = new Intent(getActivity(), CheckStayAndDepartActivity.class);
+                    intent = new Intent(getActivity(), StayAndDepartActivity.class);
                     break;
             }
             startActivity(intent);

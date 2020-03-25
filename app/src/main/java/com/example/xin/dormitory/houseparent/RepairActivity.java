@@ -1,18 +1,22 @@
 package com.example.xin.dormitory.houseparent;
 
 import android.content.SharedPreferences;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.xin.dormitory.common.Announcement;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.xin.dormitory.R;
 import com.example.xin.dormitory.Utility.HttpUtil;
 import com.example.xin.dormitory.Utility.MyApplication;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,50 +33,58 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+public class RepairActivity extends AppCompatActivity {
 
-public class CheckAnnouncementActivity extends AppCompatActivity {
+    private List<Repair> repairList = new ArrayList<>();
+    private RepairAdapter adapter;
+    private SmartRefreshLayout smartRefresh;
 
-    private List<Announcement> announcementList = new ArrayList<>();
-    private AnnouncementAdapter adapter;
-    private SwipeRefreshLayout swipeRefresh;
+    //显示全部则为"2",已处理为"1"，未处理为"0"。
+    private String which = "2";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_check_announcement);
-        initAnnouncementStudents();
+        setContentView(R.layout.activity_repair);
+        initRepair();
         RecyclerView recyclerView = findViewById(R.id.recycle_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new AnnouncementAdapter(announcementList);
+        adapter = new RepairAdapter(repairList);
         recyclerView.setAdapter(adapter);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        swipeRefresh = findViewById(R.id.swipe_refresh);
-        swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//        TitleBar titleBar = findViewById(R.id.titlebar);
+//        titleBar.addAction(new TitleBar.ImageAction(R.drawable.ic_navigation_more) {
+//            @Override
+//            public void performAction(View view) {
+//                simulateKey(KeyEvent.KEYCODE_MENU);
+//            }
+//        });
+
+        smartRefresh = findViewById(R.id.smart_refresh);
+        smartRefresh.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onRefresh() {
-                refreshAnnouncementStudents();
+            public void onRefresh(RefreshLayout refreshLayout) {
+                refreshRepairs();
             }
         });
     }
 
-
     /**
-     * 初始化显示的留宿学生
+     * 初始化显示修理申请
      */
-    private void initAnnouncementStudents(){
-        announcementList.clear();
+    private void initRepair(){
+        repairList.clear();
 
-        //学生可以接受属于这栋楼的公告，而宿管只能看自己发布的公告
         SharedPreferences pref = getSharedPreferences("dataH",MODE_PRIVATE);
         OkHttpClient client = new OkHttpClient();
-        RequestBody requestBody = new FormBody.Builder().add("houseparentID",pref.getString("ID","")).build();
+        RequestBody requestBody = new FormBody.Builder().add("which",which).add("govern",pref.getString("govern","")).build();
         //服务器地址，ip地址需要时常更换
-        String address=HttpUtil.address+"checkAnnouncementInfo.php";
+        String address= HttpUtil.address+"getRepairInfo.php";
         Request request = new Request.Builder().url(address).post(requestBody).build();
         //匿名内部类实现回调接口
         client.newCall(request).enqueue(new okhttp3.Callback(){
@@ -95,7 +107,7 @@ public class CheckAnnouncementActivity extends AppCompatActivity {
                     JSONArray jsonArray = new JSONArray(responseData);
                     for(int i=0;i<jsonArray.length();++i){
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        announcementList.add(new Announcement(jsonObject));
+                        repairList.add(new Repair(jsonObject));
                     }
                     runOnUiThread(new Runnable() {
                         @Override
@@ -118,7 +130,7 @@ public class CheckAnnouncementActivity extends AppCompatActivity {
     }
 
 
-    private void refreshAnnouncementStudents(){
+    private void refreshRepairs(){
         //网络操作耗时，故开子线程
         new Thread(new Runnable() {
             @Override
@@ -126,11 +138,61 @@ public class CheckAnnouncementActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        initAnnouncementStudents();
-                        swipeRefresh.setRefreshing(false);
+                        initRepair();
+                        smartRefresh.finishRefresh();
                     }
                 });
             }
         }).start();
     }
+
+
+    /**
+     * 菜单设置
+     * @param menu
+     * @return
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //加载 布局实现
+        getMenuInflater().inflate(R.menu.menu_repair_h, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    /**
+     * 菜单的选择事件
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.show_handled:
+                which = "1";
+                smartRefresh.autoRefresh();
+                break;
+            case R.id.show_unhandled:
+                which = "0";
+                smartRefresh.autoRefresh();
+                break;
+            case R.id.show_all:
+                which = "2";
+                smartRefresh.autoRefresh();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+//    public static void simulateKey(final int KeyCode) {
+//        new Thread() {
+//            public void run() {
+//                try {
+//                    Instrumentation inst = new Instrumentation();
+//                    inst.sendKeyDownUpSync(KeyCode);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }.start();
+//    }
+
 }

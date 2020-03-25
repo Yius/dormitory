@@ -1,12 +1,13 @@
 package com.example.xin.dormitory.houseparent;
 
 import android.content.Context;
-import android.content.Intent;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.xin.dormitory.R;
 
@@ -22,19 +23,17 @@ public class DepartAdapter extends RecyclerView.Adapter<DepartAdapter.ViewHolder
         View departView;
         //这是提交编号
         TextView tv_theID;
-        TextView tv_name;
+        TextView tv_stuID;
+        TextView tv_dormID;
         TextView tv_registerDate;
-        TextView tv_departTime;
-        TextView tv_backTime;
 
         public ViewHolder(View view){
             super(view);
             departView = view;
             tv_theID = view.findViewById(R.id.tv_theID);
-            tv_name = view.findViewById(R.id.tv_name);
             tv_registerDate = view.findViewById(R.id.tv_registerDate);
-            tv_departTime = view.findViewById(R.id.tv_startDate);
-            tv_backTime = view.findViewById(R.id.tv_endDate);
+            tv_dormID = view.findViewById(R.id.tv_dormID);
+            tv_stuID = view.findViewById(R.id.tv_stuID);
         }
     }
 
@@ -47,16 +46,36 @@ public class DepartAdapter extends RecyclerView.Adapter<DepartAdapter.ViewHolder
         if(mContext == null){
             mContext = parent.getContext();
         }
-        View view = LayoutInflater.from(mContext).inflate(R.layout.stay_or_depart,parent,false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.stay_and_depart,parent,false);
         final ViewHolder holder = new ViewHolder(view);
         holder.departView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int position = holder.getAdapterPosition();
                 Depart depart = mDepartList.get(position);
-                Intent intent = new Intent(view.getContext(),DepartStudentsDetailsActivity.class);
-                intent.putExtra("depart_data",depart);
-                mContext.startActivity(intent);
+                View dialogView = LayoutInflater.from(mContext)
+                        .inflate(R.layout.depart_student_details, null);
+                TextView tv_dormID = dialogView.findViewById(R.id.tv_dormID);
+                TextView tv_ID = dialogView.findViewById(R.id.tv_ID);
+                TextView tv_name = dialogView.findViewById(R.id.tv_name);
+                TextView tv_departCause = dialogView.findViewById(R.id.tv_departCause);
+                TextView tv_contact = dialogView.findViewById(R.id.tv_contact);
+                TextView tv_departTime = dialogView.findViewById(R.id.tv_departTime);
+                TextView tv_backTime = dialogView.findViewById(R.id.tv_backTime);
+                TextView tv_registerDate = dialogView.findViewById(R.id.tv_registerDate);
+
+                tv_dormID.setText(depart.getDormID());
+                tv_ID.setText(depart.getID());
+                tv_name.setText(depart.getName());
+                tv_departCause.setText(depart.getDepartCause());
+                tv_contact.setText(depart.getContact());
+                tv_departTime.setText(depart.getDepartTime());
+                tv_backTime.setText(depart.getBackTime());
+                tv_registerDate.setText(depart.getRegisterDate());
+
+                new AlertDialog.Builder(mContext).setTitle("离宿学生详情")
+                        .setView(dialogView)
+                        .setNegativeButton("关闭", null).show();
             }
         });
         return holder;
@@ -65,11 +84,10 @@ public class DepartAdapter extends RecyclerView.Adapter<DepartAdapter.ViewHolder
     @Override
     public void onBindViewHolder(DepartAdapter.ViewHolder holder, int position) {
         Depart depart = mDepartList.get(position);
-        holder.tv_name.setText("离宿学生:"+ depart.getName());
-        holder.tv_registerDate.setText("提交日期:"+ depart.getRegisterDate());
-        holder.tv_theID.setText("编号:"+ depart.getDepartID());
-        holder.tv_departTime.setText("离宿日期:"+ depart.getDepartTime());
-        holder.tv_backTime.setText("返宿日期:"+ depart.getBackTime());
+        holder.tv_registerDate.setText(depart.getRegisterDate());
+        holder.tv_theID.setText("编号:"+depart.getDepartID());
+        holder.tv_stuID.setText(depart.getID());
+        holder.tv_dormID.setText(depart.getDormID());
     }
 
     @Override

@@ -3,6 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.xin.dormitory">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <application
         android:name=".Utility.MyApplication"
         android:allowBackup="true"
@@ -13,12 +19,26 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
-        <activity android:name=".student.WaterAndElectricityActivity"
+        <activity
+            android:name=".houseparent.StayAndDepartActivity"
+            android:label="离宿/留宿信息"
+            android:launchMode="singleTop"
+            ></activity>
+        <activity android:name=".houseparent.CheckHistoryAnnouncementActivity" />
+        <activity
+            android:name=".houseparent.DeliverAnnouncementActivity"
+            android:label="发布通知"
+            android:launchMode="singleTop"/>
+        <activity
+            android:name=".houseparent.RepairActivity"
+            android:label="维修处理"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".student.WaterAndElectricityActivity"
             android:parentActivityName=".student.MainSActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".student.MainSActivity" />
-
         </activity>
         <activity android:name=".student.OthersInfoActivity" />
         <activity android:name=".houseparent.MeHFragment" />
@@ -53,58 +73,13 @@
             android:parentActivityName=".student.MainSActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".houseparent.ManagerRepairActivity"
-            android:label="管理维修"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".houseparent.ManagerAnnouncementActivity"
-            android:label="公告管理"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".houseparent.CheckStayAndDepartActivity"
-            android:label="离宿/留宿情况"
-            android:launchMode="singleTop" />
-        <activity
             android:name=".houseparent.ManagerSignUpActivity"
             android:label="签到相关"
             android:launchMode="singleTop" />
         <activity
-            android:name=".houseparent.UnhandledRepairActivity"
-            android:label="未处理申请"
-            android:launchMode="singleTop"
-            android:parentActivityName=".houseparent.ManagerRepairActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".houseparent.ManagerRepairActivity" />
-        </activity>
-        <activity
-            android:name=".houseparent.HandledRepairActivity"
-            android:label="已处理申请"
-            android:launchMode="singleTop"
-            android:parentActivityName=".houseparent.ManagerRepairActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".houseparent.ManagerRepairActivity" />
-        </activity>
-        <activity
             android:name=".houseparent.RepairDetailsActivity"
             android:label="申请详情"
             android:launchMode="singleTop" />
-        <activity
-            android:name=".houseparent.CreateAnnouncementActivity"
-            android:label="发布新公告"
-            android:launchMode="singleTop"
-            android:parentActivityName=".houseparent.ManagerAnnouncementActivity"
-            android:windowSoftInputMode="adjustPan">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".houseparent.ManagerAnnouncementActivity" />
-        </activity>
-        <activity
-            android:name=".houseparent.CheckAnnouncementActivity"
-            android:label="已发布公告"
-            android:launchMode="singleTop"
-            android:parentActivityName=".houseparent.ManagerAnnouncementActivity" />
         <activity
             android:name=".student.DepartRegisterActivity"
             android:label="离宿登记"
@@ -122,31 +97,6 @@
             android:label="个人信息"
             android:launchMode="singleTop"
             android:parentActivityName=".houseparent.MainHActivity" />
-        <activity
-            android:name=".houseparent.CheckStayStudentsActivity"
-            android:label="留宿信息"
-            android:launchMode="singleTop"
-            android:parentActivityName=".houseparent.CheckStayAndDepartActivity" />
-        <activity
-            android:name=".houseparent.CheckDepartStudentsActivity"
-            android:label="离宿信息"
-            android:launchMode="singleTop"
-            android:parentActivityName=".houseparent.CheckStayAndDepartActivity" />
-        <activity
-            android:name=".houseparent.StayStudentsDetailsActivity"
-            android:label="留宿详情"
-            android:launchMode="singleTop"
-            android:parentActivityName=".houseparent.CheckStayStudentsActivity" />
-        <activity
-            android:name=".houseparent.DepartStudentsDetailsActivity"
-            android:label="离宿详情"
-            android:launchMode="singleTop"
-            android:parentActivityName=".houseparent.CheckDepartStudentsActivity" />
-        <activity
-            android:name=".houseparent.AnnouncementDetailActivity"
-            android:label="公告详情"
-            android:launchMode="singleTop"
-            android:parentActivityName=".houseparent.CheckAnnouncementActivity" />
         <activity
             android:name=".student.CheckNoticesActivity"
             android:label="通知"
@@ -212,11 +162,5 @@
             android:enabled="true"
             android:exported="true" />
     </application>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
-
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 </manifest>

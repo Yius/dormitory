@@ -13,12 +13,34 @@
         android:layout_height="90dp">
 
         <TextView
-            android:id="@+id/label_dormID"
+            android:id="@+id/label_registerDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:text="申请宿舍"
+            android:text="申请时间"
+            android:paddingLeft="10dp"
+            android:paddingTop="6dp"
+            android:textSize="17sp"/>
+        <TextView
+            android:id="@+id/tv_registerDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@id/label_registerDate"
+            android:text="申请时间"
+            android:paddingLeft="10dp"
+            android:paddingTop="6dp"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/label_dormID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_registerDate"
+            android:text="宿舍号"
             android:paddingLeft="10dp"
             android:paddingTop="6dp"
             android:textSize="17sp"/>
@@ -26,31 +48,9 @@
             android:id="@+id/tv_dormID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@id/label_dormID"
+            android:layout_below="@id/tv_registerDate"
             android:text="宿舍号"
-            android:paddingLeft="10dp"
-            android:paddingTop="6dp"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:textColor="#000000"/>
-
-        <TextView
-            android:id="@+id/label_applyDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_dormID"
-            android:text="申请时间"
-            android:paddingLeft="10dp"
-            android:paddingTop="6dp"
-            android:textSize="17sp"/>
-        <TextView
-            android:id="@+id/tv_applyDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_dormID"
-            android:text="时间"
-            android:layout_toRightOf="@id/label_applyDate"
+            android:layout_toRightOf="@id/label_dormID"
             android:paddingTop="6dp"
             android:textSize="17sp"
             android:paddingLeft="10dp"
@@ -59,33 +59,33 @@
 
 
         <TextView
-            android:id="@+id/label_repairName"
+            android:id="@+id/label_stuID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_applyDate"
+            android:layout_below="@id/tv_dormID"
             android:maxLines="1"
             android:ellipsize="end"
-            android:text="维修物品"
+            android:text="学生学号"
             android:paddingTop="6dp"
             android:paddingLeft="10dp"
             android:textSize="17sp"/>
         <TextView
-            android:id="@+id/tv_repairName"
+            android:id="@+id/tv_stuID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_applyDate"
-            android:layout_toRightOf="@id/label_repairName"
+            android:layout_below="@id/tv_dormID"
+            android:layout_toRightOf="@id/label_stuID"
             android:textStyle="bold"
             android:maxLines="1"
             android:ellipsize="end"
-            android:text="维修物品"
+            android:text="学生学号"
             android:paddingTop="6dp"
             android:paddingLeft="10dp"
             android:textSize="17sp"
             android:textColor="#000000"/>
 
         <TextView
-            android:id="@+id/tv_applyID"
+            android:id="@+id/tv_theID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -98,9 +98,10 @@
             android:id="@+id/tv_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_dormID"
-            android:text="处理情况"
+            android:layout_below="@id/tv_registerDate"
+            android:text="查看详情"
             android:layout_alignParentRight="true"
+            android:textColor="#1E90FF"
             android:paddingTop="6dp"
             android:textSize="17sp"
             android:paddingRight="10dp" />
