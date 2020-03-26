@@ -79,17 +79,26 @@ public class IndexSFragment extends Fragment {
         linearLayout = getView().findViewById(R.id.ll_index);
         ViewGroup.LayoutParams lp;
         lp = linearLayout.getLayoutParams();
-        Log.d("w",""+lp.width);
         //int w =DensityUtils.px2dp(Utils.getScreenWidth(view.getContext()));
 
         //获取当前底部虚拟按键的高度（不存在为0）
-        int cur_bh = BottomNavigationBarUtils.getNavigationBarHeightIfRoom(getContext());
+        //int cur_bh = BottomNavigationBarUtils.getNavigationBarHeightIfRoom(getContext());
         //获取非全面屏下虚拟按键的高度（无论是否隐藏）
-        int real_bh= BottomNavigationBarUtils.getNavigationBarHeight(getContext());
-        Log.d("height",""+real_bh);
+        //int real_bh= BottomNavigationBarUtils.getNavigationBarHeight(getContext());
 
-        int h = DensityUtils.px2dp(Utils.getScreenHeight(getContext()));
-        lp.height = DensityUtils.dp2px(h-StatusBarUtils.getStatusBarHeight(getContext())-55-10-DensityUtils.px2dp((cur_bh>0?0:real_bh)));
+        //屏幕当前的高度（有虚拟按键时除去的高度）（单位是px）
+        int h = Utils.getScreenHeight(getContext());
+
+        //底部导航栏高度（55dp）(单位为px)
+        int bottom_bar_h = DensityUtils.dp2px(55);
+
+        //状态栏的高度
+        int status_bar_h = StatusBarUtils.getStatusBarHeight(getContext());
+
+        //toolbar的高度 采用?attr/actionBarSize 默认高度为56dp
+        int toolbar_h = DensityUtils.dp2px(56);
+
+        lp.height = h-bottom_bar_h-status_bar_h-toolbar_h;
         lp.width = 2*lp.height/3;
         linearLayout.setLayoutParams(lp);
     }
