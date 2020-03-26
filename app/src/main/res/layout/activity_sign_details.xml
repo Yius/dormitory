@@ -1,38 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:layout_scrollFlags="scroll|enterAlways"
+        android:background="@color/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:titleTextColor="#fff"
-        android:fitsSystemWindows="true"/>
-
-    <RelativeLayout
-        android:layout_width="300dp"
-        android:layout_height="250dp"
-        android:layout_marginTop="100dp"
-        android:layout_centerHorizontal="true"
-        android:elevation="3dp"
-        android:background="@drawable/round_layout"
-        >
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
         <TextView
-            android:id="@+id/tv_signdetails"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="签到信息详情"
-            android:layout_centerHorizontal="true"
-            android:textSize="40dp"/>
-    </RelativeLayout>
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:text="签到详情"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/round_layout"
+        android:elevation="3dp"
+        app:cardCornerRadius="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:ellipsize="end"
+                android:gravity="top"
+                android:maxLines="2"
+                android:text="标题"
+                android:textColor="#111111"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="60dp"
+                android:layout_toRightOf="@id/title"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:paddingTop="18dp"
+                android:text="标题"
+                android:textColor="#111111"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/houseparentName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:ellipsize="end"
+                android:gravity="top"
+                android:text="发起人"
+                android:textColor="#111111"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/tv_houseparentName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_title"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="18dp"
+                android:layout_toRightOf="@id/houseparentName"
+                android:ellipsize="end"
+                android:text="发起人"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/houseparentName"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:ellipsize="end"
+                android:gravity="top"
+                android:text="签到地点"
+                android:textColor="#111111"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/tv_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_houseparentName"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@id/address"
+                android:ellipsize="end"
+                android:text="签到地点"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/Rtime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/address"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="25dp"
+                android:ellipsize="end"
+                android:gravity="top"
+                android:text="发起时间"
+                android:textColor="#111111"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/tv_Rtime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/Rtime"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_toRightOf="@id/Rtime"
+                android:ellipsize="end"
+                android:text="发起时间"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
 
     <com.xuexiang.xui.widget.button.shadowbutton.ShadowButton
         android:id="@+id/sign"
@@ -41,10 +152,10 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="400dp"
         android:background="@drawable/button_main2"
-        app:sb_shape_type="round"
         android:gravity="center"
-        android:textSize="40dp"
-        android:text="签到">
+        android:text="签到"
+        android:textSize="30sp"
+        app:sb_shape_type="round">
 
     </com.xuexiang.xui.widget.button.shadowbutton.ShadowButton>
 </RelativeLayout>

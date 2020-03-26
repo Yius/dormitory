@@ -18,6 +18,7 @@ import com.example.xin.dormitory.common.Sign;
 import com.example.xin.dormitory.R;
 import com.example.xin.dormitory.Utility.HttpUtil;
 import com.example.xin.dormitory.Utility.MyApplication;
+import com.xuexiang.xui.widget.button.shadowbutton.ShadowButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,17 +51,16 @@ public class SignAdapterForStudent extends RecyclerView.Adapter<SignAdapterForSt
         TextView tv_theID;
         TextView tv_Rtime;
         TextView tv_title;
-        TextView tv_houseparentID;
-        Button tv_sign;
+        TextView tv_houseparentName;
+        ShadowButton sb_sign;
 
         public ViewHolder(View view){
             super(view);
             signView = view;
-//            tv_theID = view.findViewById(R.id.tv_theID);
             tv_Rtime = view.findViewById(R.id.tv_Rtime);
             tv_title = view.findViewById(R.id.tv_title);
-            tv_houseparentID = view.findViewById(R.id.tv_houseparentID);
-            tv_sign = view.findViewById(R.id.tv_sign);
+            tv_houseparentName = view.findViewById(R.id.tv_houseparentName);
+            sb_sign = view.findViewById(R.id.sb_sign);
         }
     }
 
@@ -91,15 +91,18 @@ public class SignAdapterForStudent extends RecyclerView.Adapter<SignAdapterForSt
 //                        }).setNegativeButton("取消",null).show();
 //            }
 //        });
-        holder.tv_sign.setOnClickListener(new View.OnClickListener() {
+        holder.sb_sign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = null;
+                int position = holder.getAdapterPosition();
+                Sign sign = mSignList.get(position);
                 intent = new Intent(mContext, SignDetails.class);
+                intent.putExtra("sign",sign);
                 mContext.startActivity(intent);
                 }
         });
-        holder.tv_houseparentID.setOnClickListener(new View.OnClickListener(){
+        holder.tv_houseparentName.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 int position = holder.getAdapterPosition();
@@ -150,10 +153,10 @@ public class SignAdapterForStudent extends RecyclerView.Adapter<SignAdapterForSt
     @Override
     public void onBindViewHolder(SignAdapterForStudent.ViewHolder holder, int position) {
         Sign sign = mSignList.get(position);
-        holder.tv_Rtime.setText("发布时间:"+sign.getRtime());
-        holder.tv_title.setText("标题:"+sign.getTitle());
+        holder.tv_Rtime.setText(sign.getRtime());
+        holder.tv_title.setText(sign.getTitle());
 //        holder.tv_theID.setText("编号:"+sign.getID());
-        holder.tv_houseparentID.setText("宿管ID:"+sign.getHouseparentID());
+        holder.tv_houseparentName.setText(sign.getHouseparentName());
     }
 
     @Override

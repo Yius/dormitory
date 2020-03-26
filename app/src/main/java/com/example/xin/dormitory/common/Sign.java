@@ -16,9 +16,13 @@ public class Sign implements Serializable {
     private int ID;
     private String Rtime;
     private String houseparentID;
+    private String houseparentName;
     private int nums;
     private String title;
     private String govern;
+    private double latitude;
+    private double longitude;
+    private String detailAddress;
     //totalnums是发起签到时应签到的总人数
     private int totalnums;
 
@@ -31,6 +35,10 @@ public class Sign implements Serializable {
             this.title = jsonObject.getString("title");
             this.govern = jsonObject.getString("govern");
             this.totalnums = jsonObject.getInt("totalnums");
+            this.latitude = jsonObject.getDouble("latitude");
+            this.longitude = jsonObject.getDouble("longitude");
+            this.detailAddress = jsonObject.getString("detailAddress");
+            this.houseparentName = jsonObject.getString("houseparentName");
         }catch (Exception e){
             e.printStackTrace();
             Toast.makeText(MyApplication.getContext(), "初始化出错", Toast.LENGTH_SHORT).show();
@@ -63,5 +71,21 @@ public class Sign implements Serializable {
 
     public String getGovern() {
         return govern;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public String getDetailAddress() {
+        return detailAddress;
+    }
+
+    public String getHouseparentName() {
+        return houseparentName;
     }
 }

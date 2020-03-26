@@ -49,6 +49,7 @@ public class CheckSignNoticesActivity extends AppCompatActivity {
         adapter = new SignAdapterForStudent(signList);
         recyclerView.setAdapter(adapter);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
