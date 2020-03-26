@@ -81,8 +81,11 @@ public class IndexHFragment extends Fragment {
         //toolbar的高度 采用?attr/actionBarSize 默认高度为56dp
         int toolbar_h = DensityUtils.dp2px(56);
 
-        lp.height = h-bottom_bar_h-status_bar_h-toolbar_h;
-        lp.width = 2*lp.height/3;
+        //四个按钮与下方导航栏的距离 15dp
+        int margin_h = DensityUtils.dp2px(15);
+
+        lp.height = h-bottom_bar_h-status_bar_h-toolbar_h-margin_h;
+        lp.width = 5*lp.height/7;
         linearLayout.setLayoutParams(lp);
     }
 
