@@ -119,7 +119,7 @@ public class IndexHFragment extends Fragment {
                     intent = new Intent(getActivity(), DeliverAnnouncementActivity.class);
                     break;
                 case R.id.rl_check_in:
-                    intent = new Intent(getActivity(), ManagerSignUpActivity.class);
+                    intent = new Intent(getActivity(), SignRecordSituationActivity.class);
                     break;
                 case R.id.rl_depart_stay:
                     intent = new Intent(getActivity(), StayAndDepartActivity.class);
