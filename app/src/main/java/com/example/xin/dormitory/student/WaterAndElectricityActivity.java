@@ -70,13 +70,17 @@ public class WaterAndElectricityActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
+//        setSupportActionBar(toolbar);
+//        actionBar = getSupportActionBar();
+//        if (toolbar != null) {
+//            actionBar.setDisplayHomeAsUpEnabled(true);
+//            actionBar.setTitle("水电费");
+//            toolbar.setTitleTextColor(Color.WHITE);
+//        }
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
-        actionBar = getSupportActionBar();
-        if (toolbar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle("水电费");
-            toolbar.setTitleTextColor(Color.WHITE);
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void initDormID(){

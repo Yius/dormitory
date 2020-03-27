@@ -50,7 +50,8 @@ public class CheckAnnouncementDetailsActivity extends AppCompatActivity {
      * 把布局初始化的代码写在一起
      */
     private void initLayout(){
-        Toolbar toolbar = findViewById(R.id.toolbar_details);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         tv_ID = findViewById(R.id.tv_ID);

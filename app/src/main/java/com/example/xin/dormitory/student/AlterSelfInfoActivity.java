@@ -61,7 +61,8 @@ public class AlterSelfInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alter_self_info);
-        Toolbar toolbar =findViewById(R.id.alter_self_info_toolbar);
+        Toolbar toolbar =findViewById(R.id.toolbar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
         save = findViewById(R.id.save);
         iv_avatar = findViewById(R.id.photo);

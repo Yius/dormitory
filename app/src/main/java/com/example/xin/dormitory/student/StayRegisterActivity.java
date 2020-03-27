@@ -43,7 +43,7 @@ public class StayRegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stay_register);
-        Toolbar toolbar_stay = findViewById(R.id.toolbar_stay);
+        Toolbar toolbar_stay = findViewById(R.id.toolbar);
         toolbar_stay.setTitle("");
         setSupportActionBar(toolbar_stay);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

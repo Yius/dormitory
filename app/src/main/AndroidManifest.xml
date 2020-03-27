@@ -37,19 +37,28 @@
         <activity
             android:name=".houseparent.StayAndDepartActivity"
             android:label="离宿/留宿信息"
-            android:launchMode="singleTop" />
-        <activity android:name=".houseparent.CheckHistoryAnnouncementActivity" />
+            android:launchMode="singleTop"
+            android:parentActivityName=".houseparent.IndexHFragment"/>
+        <activity
+            android:launchMode="singleTop"
+            android:label="历史通知"
+            android:name=".houseparent.CheckHistoryAnnouncementActivity"
+            android:parentActivityName=".houseparent.IndexHFragment" />
         <activity
             android:name=".houseparent.DeliverAnnouncementActivity"
             android:label="发布通知"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:parentActivityName=".houseparent.IndexHFragment"/>
         <activity
             android:name=".houseparent.RepairActivity"
             android:label="维修处理"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:parentActivityName=".houseparent.IndexHFragment" />
         <activity
             android:name=".student.WaterAndElectricityActivity"
-            android:parentActivityName=".student.MainSActivity">
+            android:label="水电费"
+            android:launchMode="singleTop"
+            android:parentActivityName=".student.IndexSFragment">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".student.MainSActivity" />
@@ -84,7 +93,7 @@
             android:name=".student.RepairApplicationActivity"
             android:label="维修申请"
             android:launchMode="singleTop"
-            android:parentActivityName=".student.MainSActivity"
+            android:parentActivityName=".student.IndexSFragment"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".houseparent.RepairDetailsActivity"
@@ -94,19 +103,19 @@
             android:name=".student.DepartRegisterActivity"
             android:label="离宿登记"
             android:launchMode="singleTop"
-            android:parentActivityName=".student.MainSActivity"
+            android:parentActivityName=".student.IndexSFragment"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".student.StayRegisterActivity"
             android:label="留宿登记"
             android:launchMode="singleTop"
-            android:parentActivityName=".student.MainSActivity"
+            android:parentActivityName=".student.IndexSFragment"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".houseparent.SelfInfoHActivity"
             android:label="个人信息"
             android:launchMode="singleTop"
-            android:parentActivityName=".houseparent.MainHActivity" />
+            android:parentActivityName=".houseparent.MeHFragment" />
         <activity
             android:name=".student.CheckNoticesActivity"
             android:label="通知"
@@ -127,7 +136,7 @@
             android:parentActivityName=".student.CheckAnnouncementNoticesActivity" />
         <activity
             android:name=".houseparent.SignRecordSituationActivity"
-            android:label="签到情况"
+            android:label="签到详情"
             android:launchMode="singleTop"
             android:parentActivityName=".houseparent.IndexHFragment" />
         <activity
@@ -137,6 +146,7 @@
             android:parentActivityName=".houseparent.SignRecordSituationActivity" />
         <activity
             android:name=".student.PostsChatActivity"
+            android:label="话题详情"
             android:launchMode="singleTop"
             android:parentActivityName=".student.PostsSFragment" />
         <activity

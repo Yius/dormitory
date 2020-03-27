@@ -54,8 +54,11 @@ public class SelfInfoHActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_self_info_h);
-        Toolbar toolbar =findViewById(R.id.self_info_toolbar);
+        Toolbar toolbar =findViewById(R.id.toolbar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         select_photo=findViewById(R.id.select_photo);
         iv_avatar=findViewById(R.id.photo);
         tv_alter = findViewById(R.id.alter);

@@ -54,6 +54,7 @@ public class CheckAnnouncementNoticesActivity extends AppCompatActivity {
         adapter = new AnnouncementAdapterS(announcementList);
         recyclerView.setAdapter(adapter);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

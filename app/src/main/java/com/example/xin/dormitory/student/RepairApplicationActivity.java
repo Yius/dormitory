@@ -42,7 +42,7 @@ public class RepairApplicationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repair_application);
-        Toolbar toolbar_repair = findViewById(R.id.toolbar_repair);
+        Toolbar toolbar_repair = findViewById(R.id.toolbar);
         toolbar_repair.setTitle("");
         setSupportActionBar(toolbar_repair);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

@@ -51,7 +51,7 @@ public class DepartRegisterActivity extends AppCompatActivity {
         depart_register = findViewById(R.id.depart_register);
         et_departCause = findViewById(R.id.et_departCause);
         et_contact1 = findViewById(R.id.et_contact1);
-        Toolbar toolbar_depart = findViewById(R.id.toolbar_depart);
+        Toolbar toolbar_depart = findViewById(R.id.toolbar);
         toolbar_depart.setTitle("");
         setSupportActionBar(toolbar_depart);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
