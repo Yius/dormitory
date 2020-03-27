@@ -110,9 +110,12 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
                     @Override
                     public void onFailure(Call call, IOException e) {
                         e.printStackTrace();
-                        Looper.prepare();
-                        Toast.makeText(MyApplication.getContext(), "服务器连接失败", Toast.LENGTH_SHORT).show();
-                        Looper.loop();
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(MyApplication.getContext(), "服务器连接失败", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
 
                     @Override
@@ -129,9 +132,12 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
                                 }
                             });
                         } else {
-                            Looper.prepare();
-                            Toast.makeText(MyApplication.getContext(), "删除失败", Toast.LENGTH_SHORT).show();
-                            Looper.loop();
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(MyApplication.getContext(), "删除失败", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
                     }
                 });

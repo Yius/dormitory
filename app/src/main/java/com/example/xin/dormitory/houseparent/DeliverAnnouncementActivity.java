@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.xin.dormitory.R;
 import com.example.xin.dormitory.Utility.HttpUtil;
@@ -37,10 +38,19 @@ public class DeliverAnnouncementActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deliver_announcement);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
         inner_title = findViewById(R.id.inner_title);
         et_content = findViewById(R.id.et_content);
         bt_deliver = findViewById(R.id.bt_deliver);
         tv_history = findViewById(R.id.tv_history);
+
+
         setListeners();
     }
 

@@ -26,6 +26,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.example.xin.dormitory.R;
 import com.example.xin.dormitory.Utility.HttpUtil;
+import com.example.xin.dormitory.Utility.MyApplication;
 import com.example.xin.dormitory.common.Sign;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.xuexiang.xui.widget.dialog.materialdialog.DialogAction;
@@ -66,6 +67,7 @@ public class SignRecordSituationActivity extends AppCompatActivity {
     public AMapLocationListener mLocationListener = null;
     //声明AMapLocationClientOption对象
     public AMapLocationClientOption mLocationOption = null;
+    private AMapLocation aMapLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,18 +94,47 @@ public class SignRecordSituationActivity extends AppCompatActivity {
             }
         });
 
+
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switch (view.getId()){
                     case R.id.fab:
-                        firstCheck();
                         postNewSign();
                         break;
                 }
             }
         });
+
+
+        firstCheck();
+        //初始化定位
+        mLocationClient = new AMapLocationClient(getApplicationContext());
+        //初始化AMapLocationClientOption对象
+        mLocationOption = new AMapLocationClientOption();
+        mLocationListener = new AMapLocationListener(){
+            @Override
+            public void onLocationChanged(AMapLocation amapLocation) {
+                if (amapLocation != null) {
+                    if (amapLocation.getErrorCode() == 0) {
+                        aMapLocation = amapLocation;
+                    }else {
+                        Toast.makeText(SignRecordSituationActivity.this,"很抱歉，无法获取您的定位信息！",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        };
+        //设置定位回调监听
+        mLocationClient.setLocationListener(mLocationListener);
+        mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
+        //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        if(null != mLocationClient){
+            mLocationClient.setLocationOption(mLocationOption);
+        }
+        mLocationClient.stopLocation();
+        mLocationClient.startLocation();
 
     }
 
@@ -196,32 +227,12 @@ public class SignRecordSituationActivity extends AppCompatActivity {
                         RadioButton radioButton2 = dialog.findViewById(R.id.rb_others);
                         EditText et_title = dialog.findViewById(R.id.et_title);
                         if(radioButton.isChecked()){
-                            //初始化定位
-                            mLocationClient = new AMapLocationClient(getApplicationContext());
-                            //初始化AMapLocationClientOption对象
-                            mLocationOption = new AMapLocationClientOption();
-                            mLocationListener = new AMapLocationListener(){
-                                @Override
-                                public void onLocationChanged(AMapLocation amapLocation) {
-                                    if (amapLocation != null) {
-                                        if (amapLocation.getErrorCode() == 0) {
-                                            postNewSignHelp(et_title.getText().toString(),amapLocation.getLatitude(),amapLocation.getLongitude(),amapLocation.getAddress());
-                                        }else {
-                                            Toast.makeText(SignRecordSituationActivity.this,"很抱歉，无法获取您的定位信息！",Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                }
-                            };
-                            //设置定位回调监听
-                            mLocationClient.setLocationListener(mLocationListener);
-                            mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
-                            //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
-                            mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-                            if(null != mLocationClient){
-                                mLocationClient.setLocationOption(mLocationOption);
+                            if (aMapLocation != null || aMapLocation.getErrorCode() == 0) {
+                                //按下确定键后的事件
+                                postNewSignHelp(et_title.getText().toString(),aMapLocation.getLatitude(),aMapLocation.getLongitude(),aMapLocation.getAddress());
+                            } else {
+                                Toast.makeText(MyApplication.getContext(), "无法定位，无法发起。", Toast.LENGTH_SHORT).show();
                             }
-                            mLocationClient.stopLocation();
-                            mLocationClient.startLocation();
                         }
                         if(radioButton2.isChecked()){
                             Intent intent = new Intent(SignRecordSituationActivity.this,LocationChooseActivity.class);
@@ -288,36 +299,28 @@ public class SignRecordSituationActivity extends AppCompatActivity {
     }
 
 
+
+    //1、首先声明一个数组permissions，将需要的权限都放在里面
+    String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE
+            };
+    //2、创建一个mPermissionList，逐个判断哪些权限未授予，未授予的权限存储到mPerrrmissionList中
+    List<String> mPermissionList = new ArrayList<>();
+
+    private final int mRequestCode = 100;//权限请求码
+
+
     public void firstCheck(){
-        //这里以ACCESS_COARSE_LOCATION为例
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            //申请WRITE_EXTERNAL_STORAGE权限
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},1);//自定义的code
+        mPermissionList.clear();//清空没有通过的权限
+        //逐个判断你要的权限是否已经通过
+        for (int i = 0; i < permissions.length; i++) {
+            if (ContextCompat.checkSelfPermission(this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
+                mPermissionList.add(permissions[i]);//添加还未授予的权限
+            }
         }
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            //申请WRITE_EXTERNAL_STORAGE权限
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},2);//自定义的code
-        }
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            //申请WRITE_EXTERNAL_STORAGE权限
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},3);//自定义的code
-        }
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            //申请WRITE_EXTERNAL_STORAGE权限
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},4);//自定义的code
-        }
-
-        if (ContextCompat.checkSelfPermission(this,Manifest.permission.READ_PHONE_STATE)
-                != PackageManager.PERMISSION_GRANTED) {
-            //申请WRITE_EXTERNAL_STORAGE权限
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE},5);//自定义的code
+        //申请权限
+        if (mPermissionList.size() > 0) {//有权限没有通过，需要申请
+            ActivityCompat.requestPermissions(this, permissions, mRequestCode);
         }
 
     }

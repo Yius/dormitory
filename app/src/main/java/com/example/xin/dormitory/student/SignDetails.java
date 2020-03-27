@@ -34,7 +34,9 @@ import com.xuexiang.xui.widget.button.shadowbutton.ShadowButton;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.FormBody;
@@ -76,6 +78,35 @@ public class SignDetails extends AppCompatActivity {
         tv_Rtime = findViewById(R.id.tv_Rtime);
 
         firstCheck();
+
+        //初始化定位
+        mLocationClient = new AMapLocationClient(getApplicationContext());
+        //初始化AMapLocationClientOption对象
+        mLocationOption = new AMapLocationClientOption();
+        mLocationListener = new AMapLocationListener() {
+            @Override
+            public void onLocationChanged(AMapLocation amapLocation) {
+                if (amapLocation != null) {
+                    if (amapLocation.getErrorCode() != 0) {
+                        Toast.makeText(SignDetails.this, "很抱歉，无法获取您的定位信息！", Toast.LENGTH_SHORT).show();
+                    } else {
+                        aMapLocation = amapLocation;
+                    }
+                }
+            }
+        };
+        //设置定位回调监听
+        mLocationClient.setLocationListener(mLocationListener);
+        mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
+        //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        if (null != mLocationClient) {
+            mLocationClient.setLocationOption(mLocationOption);
+        }
+        mLocationClient.stopLocation();
+        mLocationClient.startLocation();
+
+
         Sign sign = (Sign) getIntent().getSerializableExtra("sign");
         tv_title.setText(sign.getTitle());
         tv_houseparentName.setText(sign.getHouseparentName());
@@ -84,32 +115,6 @@ public class SignDetails extends AppCompatActivity {
         sb_sign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //初始化定位
-                mLocationClient = new AMapLocationClient(getApplicationContext());
-                //初始化AMapLocationClientOption对象
-                mLocationOption = new AMapLocationClientOption();
-                mLocationListener = new AMapLocationListener() {
-                    @Override
-                    public void onLocationChanged(AMapLocation amapLocation) {
-                        if (amapLocation != null) {
-                            if (amapLocation.getErrorCode() != 0) {
-                                Toast.makeText(SignDetails.this, "很抱歉，无法获取您的定位信息！", Toast.LENGTH_SHORT).show();
-                            } else {
-                                aMapLocation = amapLocation;
-                            }
-                        }
-                    }
-                };
-                //设置定位回调监听
-                mLocationClient.setLocationListener(mLocationListener);
-                mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
-                //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
-                mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-                if (null != mLocationClient) {
-                    mLocationClient.setLocationOption(mLocationOption);
-                }
-                mLocationClient.stopLocation();
-                mLocationClient.startLocation();
                 new AlertDialog.Builder(SignDetails.this).setTitle("你要现在签到吗？")
                         .setIcon(R.drawable.ic_sign_notice)
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -135,8 +140,8 @@ public class SignDetails extends AppCompatActivity {
      */
     private void studentSignHelp(Sign sign, double latitude, double longitude) {
         float distance = AMapUtils.calculateLineDistance(new LatLng(sign.getLatitude(), sign.getLongitude()), new LatLng(latitude, longitude));
-        if (distance > 50) {
-            Toast.makeText(SignDetails.this, "当前距离打卡点的距离超过50米，请尝试到打卡点附近打卡，目前距离为:" + distance + "米", Toast.LENGTH_SHORT).show();
+        if (distance > 100) {
+            Toast.makeText(SignDetails.this, "当前距离打卡点的距离超过100米，请尝试到打卡点附近打卡，目前距离为:" + distance + "米", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -154,9 +159,12 @@ public class SignDetails extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
-                Looper.prepare();
-                Toast.makeText(MyApplication.getContext(), "服务器连接失败", Toast.LENGTH_SHORT).show();
-                Looper.loop();
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MyApplication.getContext(), "服务器连接失败", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
@@ -172,44 +180,41 @@ public class SignDetails extends AppCompatActivity {
                     });
                     finish();
                 } else {
-                    Looper.prepare();
-                    Toast.makeText(MyApplication.getContext(), "签到失败,请不要重复签到哦", Toast.LENGTH_SHORT).show();
-                    Looper.loop();
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MyApplication.getContext(), "签到失败,请不要重复签到哦", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         });
     }
 
-    public void firstCheck() {
-        //这里以ACCESS_COARSE_LOCATION为例
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            //申请WRITE_EXTERNAL_STORAGE权限
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);//自定义的code
-        }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            //申请WRITE_EXTERNAL_STORAGE权限
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 2);//自定义的code
-        }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            //申请WRITE_EXTERNAL_STORAGE权限
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);//自定义的code
-        }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            //申请WRITE_EXTERNAL_STORAGE权限
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 4);//自定义的code
-        }
+    //1、首先声明一个数组permissions，将需要的权限都放在里面
+    String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE
+    };
+    //2、创建一个mPermissionList，逐个判断哪些权限未授予，未授予的权限存储到mPerrrmissionList中
+    List<String> mPermissionList = new ArrayList<>();
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
-                != PackageManager.PERMISSION_GRANTED) {
-            //申请WRITE_EXTERNAL_STORAGE权限
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 5);//自定义的code
+    private final int mRequestCode = 100;//权限请求码
+
+
+    public void firstCheck(){
+        mPermissionList.clear();//清空没有通过的权限
+        //逐个判断你要的权限是否已经通过
+        for (int i = 0; i < permissions.length; i++) {
+            if (ContextCompat.checkSelfPermission(this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
+                mPermissionList.add(permissions[i]);//添加还未授予的权限
+            }
+        }
+        //申请权限
+        if (mPermissionList.size() > 0) {//有权限没有通过，需要申请
+            ActivityCompat.requestPermissions(this, permissions, mRequestCode);
         }
 
     }
@@ -218,9 +223,9 @@ public class SignDetails extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         //可在此继续其他操作。
-        for (int result : grantResults) {
-            if (result != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(SignDetails.this, "缺少必要的权限！", Toast.LENGTH_SHORT).show();
+        for(int result:grantResults){
+            if(result!=PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(SignDetails.this,"缺少必要的权限！",Toast.LENGTH_SHORT).show();
                 return;
             }
         }

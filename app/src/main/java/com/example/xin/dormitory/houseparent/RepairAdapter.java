@@ -3,6 +3,7 @@ package com.example.xin.dormitory.houseparent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Handler;
 import android.os.Looper;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
@@ -120,22 +121,31 @@ public class RepairAdapter extends RecyclerView.Adapter<RepairAdapter.ViewHolder
                                                 @Override
                                                 public void onFailure(Call call, IOException e) {
                                                     e.printStackTrace();
-                                                    Looper.prepare();
-                                                    Toast.makeText(MyApplication.getContext(), "服务器连接失败，无法修改", Toast.LENGTH_SHORT).show();
-                                                    Looper.loop();
+                                                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText(MyApplication.getContext(), "服务器连接失败，无法修改", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
                                                 }
 
                                                 @Override
                                                 public void onResponse(Call call, Response response) throws IOException {
                                                     String responseData = response.body().string();
                                                     if (HttpUtil.parseSimpleJSONData(responseData)) {
-                                                        Looper.prepare();
-                                                        Toast.makeText(MyApplication.getContext(), "修改成功", Toast.LENGTH_SHORT).show();
-                                                        Looper.loop();
+                                                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                Toast.makeText(MyApplication.getContext(), "修改成功", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
                                                     } else {
-                                                        Looper.prepare();
-                                                        Toast.makeText(MyApplication.getContext(), "修改失败", Toast.LENGTH_SHORT).show();
-                                                        Looper.loop();
+                                                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                Toast.makeText(MyApplication.getContext(), "修改失败", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
                                                     }
                                                 }
                                             });

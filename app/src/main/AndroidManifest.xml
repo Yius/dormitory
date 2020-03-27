@@ -34,7 +34,6 @@
 
         <service android:name="com.amap.api.location.APSService" />
 
-        <activity android:name=".houseparent.MainActivity" />
         <activity
             android:name=".houseparent.StayAndDepartActivity"
             android:label="离宿/留宿信息"
@@ -88,10 +87,6 @@
             android:parentActivityName=".student.MainSActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".houseparent.ManagerSignUpActivity"
-            android:label="签到相关"
-            android:launchMode="singleTop" />
-        <activity
             android:name=".houseparent.RepairDetailsActivity"
             android:label="申请详情"
             android:launchMode="singleTop" />
@@ -134,7 +129,7 @@
             android:name=".houseparent.SignRecordSituationActivity"
             android:label="签到情况"
             android:launchMode="singleTop"
-            android:parentActivityName=".houseparent.ManagerSignUpActivity" />
+            android:parentActivityName=".houseparent.IndexHFragment" />
         <activity
             android:name=".houseparent.CheckUnsignedStudentsActivity"
             android:label="未签到学生"
