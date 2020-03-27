@@ -1,5 +1,6 @@
 package com.example.xin.dormitory.student;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,12 +12,17 @@ import com.example.xin.dormitory.R;
 import com.example.xin.dormitory.Utility.HttpUtil;
 import com.example.xin.dormitory.Utility.MyApplication;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshHeader;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +44,7 @@ public class PostsSFragment extends Fragment {
 
     private FloatingActionButton fab;
     private RecyclerView recyclerView;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private SmartRefreshLayout smartRefresh;
 
     private List<Post> mPostList = new ArrayList<>();
     private PostAdapter adapter;
@@ -59,7 +65,7 @@ public class PostsSFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initSwiperRefresh();
+        initSmartRefresh();
         initFab();
         initPosts();
         initRecyclerView();
@@ -143,18 +149,25 @@ public class PostsSFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 recyclerView.scrollToPosition(0);
-                swipeRefreshLayout.setRefreshing(true);
+                smartRefresh.autoRefresh();
                 refreshPosts();
             }
         });
     }
 
-    private void initSwiperRefresh(){
-        swipeRefreshLayout = getView().findViewById(R.id.posts_swiper_refresh);
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+    private void initSmartRefresh(){
+        smartRefresh = getView().findViewById(R.id.smart_refresh);
+//        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                refreshPosts();
+//            }
+//        });
+        smartRefresh.setRefreshHeader(getRefreshHeader("FunGameHitBlockHeader"));
+        smartRefresh.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onRefresh() {
+            public void onRefresh(RefreshLayout refreshLayout) {
                 refreshPosts();
             }
         });
@@ -173,11 +186,23 @@ public class PostsSFragment extends Fragment {
                     @Override
                     public void run() {
                         initPosts();
-                        swipeRefreshLayout.setRefreshing(false);
+                        smartRefresh.finishRefresh();
                     }
                 });
             }
         }).start();
+    }
+
+
+    private RefreshHeader getRefreshHeader(String name) {
+        try {
+            Class<?> headerClass = Class.forName("com.scwang.smartrefresh.header." + name);
+            Constructor<?> constructor = headerClass.getConstructor(Context.class);
+            return  (RefreshHeader) constructor.newInstance(MyApplication.getContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

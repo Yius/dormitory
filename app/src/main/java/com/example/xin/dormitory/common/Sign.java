@@ -41,7 +41,7 @@ public class Sign implements Serializable {
             this.houseparentName = jsonObject.getString("houseparentName");
         }catch (Exception e){
             e.printStackTrace();
-            Toast.makeText(MyApplication.getContext(), "初始化出错", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MyApplication.getContext(), "初始化出错", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -1,6 +1,6 @@
 <?php
     include_once("connect.php");
-    $sql=mysqli_query($conn,"SELECT * FROM postsinfo");
+    $sql=mysqli_query($conn,"SELECT * FROM postsinfo ORDER BY LatestReplyTime");
     $i = 0;
     while($result = mysqli_fetch_array($sql)){
                $back[$i]['PostsID']= $result['PostsID'];

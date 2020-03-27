@@ -35,7 +35,7 @@ public class Depart implements Serializable {
             this.name = jsonObject.getString("name");
         }catch (Exception e){
             e.printStackTrace();
-            Toast.makeText(MyApplication.getContext(), "初始化出错", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MyApplication.getContext(), "初始化出错", Toast.LENGTH_SHORT).show();
         }
     }
 

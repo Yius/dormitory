@@ -30,7 +30,7 @@ public class Announcement implements Serializable {
             this.govern = jsonObject.getString("govern");
         }catch (Exception e){
             e.printStackTrace();
-            Toast.makeText(MyApplication.getContext(), "初始化出错", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MyApplication.getContext(), "初始化出错", Toast.LENGTH_SHORT).show();
         }
     }
 
