@@ -181,12 +181,12 @@ public class LoginActivity extends AppCompatActivity {
                 String responseData = response.body().string();
                 if(HttpUtil.parseSimpleJSONData(responseData)){
                     //子线程中操作Toast会出现问题，所以用runOnUiThread
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(LoginActivity.this,"登录成功",Toast.LENGTH_SHORT).show();
-                        }
-                    });
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Toast.makeText(LoginActivity.this,"登录成功",Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
                     Intent intent = null;
                     if(student.isChecked()) {
                         intent = new Intent(LoginActivity.this, MainSActivity.class);

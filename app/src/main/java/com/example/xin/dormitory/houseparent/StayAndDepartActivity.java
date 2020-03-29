@@ -3,6 +3,8 @@ package com.example.xin.dormitory.houseparent;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +19,8 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.xuexiang.xui.widget.guidview.GuideCaseQueue;
+import com.xuexiang.xui.widget.guidview.GuideCaseView;
 import com.xuexiang.xui.widget.tabbar.TabControlView;
 
 import org.json.JSONArray;
@@ -56,7 +60,7 @@ public class StayAndDepartActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycle_view);
         mTabControlView = findViewById(R.id.tcv_select);
         try {
-            mTabControlView.setItems(new String[]{"离宿","留宿"}, new String[]{"0","1"});
+            mTabControlView.setItems(new String[]{"离宿", "留宿"}, new String[]{"0", "1"});
             mTabControlView.setDefaultSelection(contentMode);
         } catch (Exception e) {
             e.printStackTrace();
@@ -92,6 +96,7 @@ public class StayAndDepartActivity extends AppCompatActivity {
 
         adapterSettingHelper();
         refreshStudentInfo();
+        showTextGuideView();
 
     }
 
@@ -99,17 +104,17 @@ public class StayAndDepartActivity extends AppCompatActivity {
     /**
      * 初始化显示修理申请
      */
-    private void initDepartInfo(){
+    private void initDepartInfo() {
         departList.clear();
 
-        SharedPreferences pref = getSharedPreferences("dataH",MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences("dataH", MODE_PRIVATE);
         OkHttpClient client = new OkHttpClient();
-        RequestBody requestBody = new FormBody.Builder().add("govern",pref.getString("govern","")).build();
+        RequestBody requestBody = new FormBody.Builder().add("govern", pref.getString("govern", "")).build();
         //服务器地址，ip地址需要时常更换
-        String address=HttpUtil.address+"departStudentsInfo.php";
+        String address = HttpUtil.address + "departStudentsInfo.php";
         Request request = new Request.Builder().url(address).post(requestBody).build();
         //匿名内部类实现回调接口
-        client.newCall(request).enqueue(new okhttp3.Callback(){
+        client.newCall(request).enqueue(new okhttp3.Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {
@@ -117,7 +122,7 @@ public class StayAndDepartActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(MyApplication.getContext(),"服务器连接失败，无法获取信息",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MyApplication.getContext(), "服务器连接失败，无法获取信息", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -127,7 +132,7 @@ public class StayAndDepartActivity extends AppCompatActivity {
                 String responseData = response.body().string();
                 try {
                     JSONArray jsonArray = new JSONArray(responseData);
-                    for(int i=0;i<jsonArray.length();++i){
+                    for (int i = 0; i < jsonArray.length(); ++i) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         departList.add(new Depart(jsonObject));
                     }
@@ -141,12 +146,12 @@ public class StayAndDepartActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MyApplication.getContext(),"数据加载完成",Toast.LENGTH_SHORT).show();
-                    }
-                });
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Toast.makeText(MyApplication.getContext(), "数据加载完成", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
             }
         });
     }
@@ -155,17 +160,17 @@ public class StayAndDepartActivity extends AppCompatActivity {
     /**
      * 初始化显示的留宿学生
      */
-    private void initStayInfo(){
+    private void initStayInfo() {
         stayList.clear();
 
-        SharedPreferences pref = getSharedPreferences("dataH",MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences("dataH", MODE_PRIVATE);
         OkHttpClient client = new OkHttpClient();
-        RequestBody requestBody = new FormBody.Builder().add("govern",pref.getString("govern","")).build();
+        RequestBody requestBody = new FormBody.Builder().add("govern", pref.getString("govern", "")).build();
         //服务器地址，ip地址需要时常更换
-        String address=HttpUtil.address+"stayStudentsInfo.php";
+        String address = HttpUtil.address + "stayStudentsInfo.php";
         Request request = new Request.Builder().url(address).post(requestBody).build();
         //匿名内部类实现回调接口
-        client.newCall(request).enqueue(new okhttp3.Callback(){
+        client.newCall(request).enqueue(new okhttp3.Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {
@@ -173,7 +178,7 @@ public class StayAndDepartActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(MyApplication.getContext(),"服务器连接失败，无法获取信息",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MyApplication.getContext(), "服务器连接失败，无法获取信息", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -183,7 +188,7 @@ public class StayAndDepartActivity extends AppCompatActivity {
                 String responseData = response.body().string();
                 try {
                     JSONArray jsonArray = new JSONArray(responseData);
-                    for(int i=0;i<jsonArray.length();++i){
+                    for (int i = 0; i < jsonArray.length(); ++i) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         stayList.add(new Stay(jsonObject));
                     }
@@ -197,18 +202,18 @@ public class StayAndDepartActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MyApplication.getContext(),"数据加载完成",Toast.LENGTH_SHORT).show();
-                    }
-                });
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Toast.makeText(MyApplication.getContext(), "数据加载完成", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
             }
         });
     }
 
 
-    private void refreshStudentInfo(){
+    private void refreshStudentInfo() {
         //网络操作耗时，故开子线程
         new Thread(new Runnable() {
             @Override
@@ -216,7 +221,7 @@ public class StayAndDepartActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        switch (contentMode){
+                        switch (contentMode) {
                             case CHECK_DEPART_STUDENT:
                                 initDepartInfo();
                                 break;
@@ -231,8 +236,8 @@ public class StayAndDepartActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void adapterSettingHelper(){
-        switch (contentMode){
+    private void adapterSettingHelper() {
+        switch (contentMode) {
             case CHECK_DEPART_STUDENT:
                 recyclerView.setAdapter(departAdapter);
                 break;
@@ -246,10 +251,37 @@ public class StayAndDepartActivity extends AppCompatActivity {
         try {
             Class<?> headerClass = Class.forName("com.scwang.smartrefresh.header." + name);
             Constructor<?> constructor = headerClass.getConstructor(Context.class);
-            return  (RefreshHeader) constructor.newInstance(MyApplication.getContext());
+            return (RefreshHeader) constructor.newInstance(MyApplication.getContext());
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
+
+    private void showTextGuideView() {
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
+        TypedValue tv = new TypedValue();
+        StayAndDepartActivity.this.getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true);
+        int actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, StayAndDepartActivity.this.getResources().getDisplayMetrics());
+
+        final GuideCaseView guideStep1 = new GuideCaseView.Builder(StayAndDepartActivity.this)
+                .title("点击查看离宿学生信息")
+                .focusRectAtPosition(outMetrics.widthPixels / 4, actionBarHeight + 50, outMetrics.widthPixels / 2, 60)
+                .roundRectRadius(60)
+                .build();
+
+        final GuideCaseView guideStep2 = new GuideCaseView.Builder(StayAndDepartActivity.this)
+                .title("点击查看留宿学生信息")
+                .focusRectAtPosition(outMetrics.widthPixels * 3 / 4, actionBarHeight + 50, outMetrics.widthPixels / 2, 60)
+                .roundRectRadius(60)
+                .build();
+
+        new GuideCaseQueue()
+                .add(guideStep1)
+                .add(guideStep2)
+                .show();
+
+    }
+
 }

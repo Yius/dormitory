@@ -1,9 +1,14 @@
 package com.example.xin.dormitory.houseparent;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +22,8 @@ import com.example.xin.dormitory.Utility.MyApplication;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.xuexiang.xui.widget.guidview.GuideCaseQueue;
+import com.xuexiang.xui.widget.guidview.GuideCaseView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,22 +79,24 @@ public class RepairActivity extends AppCompatActivity {
                 refreshRepairs();
             }
         });
+
+        showTextGuideView();
     }
 
     /**
      * 初始化显示修理申请
      */
-    private void initRepair(){
+    private void initRepair() {
         repairList.clear();
 
-        SharedPreferences pref = getSharedPreferences("dataH",MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences("dataH", MODE_PRIVATE);
         OkHttpClient client = new OkHttpClient();
-        RequestBody requestBody = new FormBody.Builder().add("which",which).add("govern",pref.getString("govern","")).build();
+        RequestBody requestBody = new FormBody.Builder().add("which", which).add("govern", pref.getString("govern", "")).build();
         //服务器地址，ip地址需要时常更换
-        String address= HttpUtil.address+"getRepairInfo.php";
+        String address = HttpUtil.address + "getRepairInfo.php";
         Request request = new Request.Builder().url(address).post(requestBody).build();
         //匿名内部类实现回调接口
-        client.newCall(request).enqueue(new okhttp3.Callback(){
+        client.newCall(request).enqueue(new okhttp3.Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {
@@ -95,7 +104,7 @@ public class RepairActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(MyApplication.getContext(),"服务器连接失败，无法获取信息",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MyApplication.getContext(), "服务器连接失败，无法获取信息", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -105,7 +114,7 @@ public class RepairActivity extends AppCompatActivity {
                 String responseData = response.body().string();
                 try {
                     JSONArray jsonArray = new JSONArray(responseData);
-                    for(int i=0;i<jsonArray.length();++i){
+                    for (int i = 0; i < jsonArray.length(); ++i) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         repairList.add(new Repair(jsonObject));
                     }
@@ -119,18 +128,18 @@ public class RepairActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MyApplication.getContext(),"数据加载完成",Toast.LENGTH_SHORT).show();
-                    }
-                });
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Toast.makeText(MyApplication.getContext(), "数据加载完成", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
             }
         });
     }
 
 
-    private void refreshRepairs(){
+    private void refreshRepairs() {
         //网络操作耗时，故开子线程
         new Thread(new Runnable() {
             @Override
@@ -149,6 +158,7 @@ public class RepairActivity extends AppCompatActivity {
 
     /**
      * 菜单设置
+     *
      * @param menu
      * @return
      */
@@ -161,12 +171,13 @@ public class RepairActivity extends AppCompatActivity {
 
     /**
      * 菜单的选择事件
+     *
      * @param item
      * @return
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.show_handled:
                 which = "1";
                 smartRefresh.autoRefresh();
@@ -194,5 +205,16 @@ public class RepairActivity extends AppCompatActivity {
 //            }
 //        }.start();
 //    }
+
+    private void showTextGuideView() {
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
+        new GuideCaseView.Builder(RepairActivity.this)
+                .title("点击可查看不同\n状态的处理申请")
+                .focusRectAtPosition(outMetrics.widthPixels - 50, 50, 100, 100)
+                .roundRectRadius(60)
+                .build()
+                .show();
+    }
 
 }

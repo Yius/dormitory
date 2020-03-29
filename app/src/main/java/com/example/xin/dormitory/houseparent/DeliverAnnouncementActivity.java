@@ -3,6 +3,7 @@ package com.example.xin.dormitory.houseparent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import com.example.xin.dormitory.R;
 import com.example.xin.dormitory.Utility.HttpUtil;
 import com.example.xin.dormitory.Utility.MyApplication;
 import com.xuexiang.xui.widget.button.ButtonView;
+import com.xuexiang.xui.widget.guidview.GuideCaseView;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -52,6 +54,7 @@ public class DeliverAnnouncementActivity extends AppCompatActivity{
 
 
         setListeners();
+        showTextGuideView();
     }
 
 
@@ -124,6 +127,16 @@ public class DeliverAnnouncementActivity extends AppCompatActivity{
                     break;
             }
         }
+    }
+
+    private void showTextGuideView() {
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
+        new GuideCaseView.Builder(DeliverAnnouncementActivity.this)
+                .title("点击可查看历史通知")
+                .focusOn(tv_history)
+                .build()
+                .show();
     }
 
 }

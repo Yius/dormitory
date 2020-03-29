@@ -10,11 +10,17 @@ import butterknife.ButterKnife;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.xin.dormitory.R;
 import com.example.xin.dormitory.Utility.HttpUtil;
+import com.example.xin.dormitory.houseparent.StayAndDepartActivity;
+import com.xuexiang.xui.widget.guidview.FocusShape;
+import com.xuexiang.xui.widget.guidview.GuideCaseQueue;
+import com.xuexiang.xui.widget.guidview.GuideCaseView;
 import com.xuexiang.xui.widget.layout.ExpandableLayout;
 import com.xuexiang.xui.widget.textview.supertextview.SuperButton;
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView;
@@ -67,6 +73,7 @@ public class WaterAndElectricityActivity extends AppCompatActivity {
         initTextView();
         initWater();
         initElectricity();
+        showTextGuideView();
     }
 
     private void initToolbar() {
@@ -169,6 +176,30 @@ public class WaterAndElectricityActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+
+    private void showTextGuideView() {
+
+        final GuideCaseView guideStep1 = new GuideCaseView.Builder(WaterAndElectricityActivity.this)
+                .title("点击可访问水费查询网址")
+                .focusOn(tv_water)
+                .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                .roundRectRadius(90)
+                .build();
+
+        final GuideCaseView guideStep2 = new GuideCaseView.Builder(WaterAndElectricityActivity.this)
+                .title("点击可访问电费查询网址")
+                .focusOn(tv_electricity)
+                .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                .roundRectRadius(90)
+                .build();
+
+        new GuideCaseQueue()
+                .add(guideStep1)
+                .add(guideStep2)
+                .show();
+
     }
 }
 

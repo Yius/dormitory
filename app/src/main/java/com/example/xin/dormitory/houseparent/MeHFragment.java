@@ -82,6 +82,7 @@ public class MeHFragment extends Fragment {
                     intent = new Intent(getActivity(), SelfInfoHActivity.class);
                     break;
                 case R.id.ll_set_up_h:
+                    intent = new Intent(getActivity(), SetWaterAndElectricityActivity.class);
                     break;
             }
             startActivity(intent);

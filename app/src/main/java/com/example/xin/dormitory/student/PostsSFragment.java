@@ -119,12 +119,12 @@ public class PostsSFragment extends Fragment {
                     }catch(JSONException e){
                         e.printStackTrace();
                     }
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(MyApplication.getContext(),"数据加载完成", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Toast.makeText(MyApplication.getContext(),"数据加载完成", Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
                 }
             });
         }catch(Exception e){
