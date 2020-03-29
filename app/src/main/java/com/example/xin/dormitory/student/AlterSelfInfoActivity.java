@@ -188,9 +188,15 @@ public class AlterSelfInfoActivity extends AppCompatActivity {
                                         startActivityForResult(intent, TAKE_PICTURE);
                                     }
                                     else if(position==1){
-                                        Intent openAlbumIntent = new Intent(
-                                                Intent.ACTION_GET_CONTENT);
-                                        openAlbumIntent.setType("image/*");
+                                        Intent openAlbumIntent = new Intent();
+                                        if (Build.VERSION.SDK_INT < 19) {
+                                            openAlbumIntent.setAction(Intent.ACTION_GET_CONTENT);
+                                            openAlbumIntent.setType("image/*");
+                                        }
+                                        else {
+                                            openAlbumIntent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                            openAlbumIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
+                                        }
                                         startActivityForResult(openAlbumIntent, CHOOSE_PICTURE);
                                     }
                                 }

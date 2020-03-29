@@ -39,6 +39,7 @@ public class StayRegisterActivity extends AppCompatActivity {
     private Button endDate;
     private Button stay_register;
     private EditText et_contact2;
+    private TextView tv_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +54,9 @@ public class StayRegisterActivity extends AppCompatActivity {
         endDate = findViewById(R.id.endDate);
         stay_register = findViewById(R.id.stay_register);
         et_contact2 = findViewById(R.id.et_contact2);
+        tv_id= findViewById(R.id.tv_id);
+        SharedPreferences pref = getSharedPreferences("data",MODE_PRIVATE);
+        tv_id.setText(pref.getString("ID",""));
         setListeners();
     }
     private void setListeners() {

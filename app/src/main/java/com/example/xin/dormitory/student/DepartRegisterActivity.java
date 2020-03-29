@@ -40,6 +40,7 @@ public class DepartRegisterActivity extends AppCompatActivity {
     private Button depart_register;
     private EditText et_departCause;
     private EditText et_contact1;
+    private TextView tv_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +52,9 @@ public class DepartRegisterActivity extends AppCompatActivity {
         depart_register = findViewById(R.id.depart_register);
         et_departCause = findViewById(R.id.et_departCause);
         et_contact1 = findViewById(R.id.et_contact1);
+        tv_id= findViewById(R.id.tv_id);
+        SharedPreferences pref = getSharedPreferences("data",MODE_PRIVATE);
+        tv_id.setText(pref.getString("ID",""));
         Toolbar toolbar_depart = findViewById(R.id.toolbar);
         toolbar_depart.setTitle("");
         setSupportActionBar(toolbar_depart);

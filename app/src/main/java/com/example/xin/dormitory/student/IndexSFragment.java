@@ -128,7 +128,7 @@ public class IndexSFragment extends Fragment {
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = new FormBody.Builder().add("belong",pref.getString("belong","")).build();
         //服务器地址，ip地址需要时常更换
-        String address= HttpUtil.address+"checkAnnouncementInfoS.php";
+        String address= HttpUtil.address+"checkThreeAnnouncements.php";
         Request request = new Request.Builder().url(address).post(requestBody).build();
         //匿名内部类实现回调接口
         client.newCall(request).enqueue(new okhttp3.Callback(){
@@ -147,30 +147,30 @@ public class IndexSFragment extends Fragment {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String responseData = response.body().string();
-                try {
-                    JSONArray jsonArray = new JSONArray(responseData);
-                    for(int i=0;i<textViews.length&&(jsonArray.length()-i-1>=0);i++){
-                        JSONObject jsonObject = jsonArray.getJSONObject(jsonArray.length()-i-1);
-                        final Announcement announcement = new Announcement(jsonObject);
-                        textViews[i].setText(jsonObject.getString("title"));
-                        textViews[i].setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(getActivity(),CheckAnnouncementDetailsActivity.class);
-                                intent.putExtra("announcement_data",announcement);
-                                startActivity(intent);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            JSONArray jsonArray = new JSONArray(responseData);
+                            Log.d("length",""+jsonArray.length());
+                            for(int i=0;i<jsonArray.length();i++){
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                final Announcement announcement = new Announcement(jsonObject);
+                                textViews[i].setText(jsonObject.getString("title"));
+                                textViews[i].setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(getActivity(),CheckAnnouncementDetailsActivity.class);
+                                        intent.putExtra("announcement_data",announcement);
+                                        startActivity(intent);
+                                    }
+                                });
                             }
-                        });
-                    }
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    });
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                    }
+                });
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

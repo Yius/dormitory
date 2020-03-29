@@ -158,7 +158,13 @@ public class MainSActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                initHead();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        initHead();
+                    }
+                });
+
             }
         });
     }
@@ -240,13 +246,11 @@ public class MainSActivity extends AppCompatActivity {
         exit.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Intent intent = null;
                 switch(item.getItemId()){
                     case R.id.nav_exit:
-                        intent = new Intent(MainSActivity.this, LoginActivity.class);
+                        finish();
                         break;
                 }
-                startActivity(intent);
                 return true;
             }
         });

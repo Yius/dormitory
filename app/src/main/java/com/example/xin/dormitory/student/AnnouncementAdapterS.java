@@ -67,8 +67,8 @@ public class AnnouncementAdapterS extends RecyclerView.Adapter<AnnouncementAdapt
     public void onBindViewHolder(AnnouncementAdapterS.ViewHolder holder, int position) {
         Announcement announcement = mAnnouncementList.get(position);
 //        holder.tv_theID.setText("编号:"+announcement.getID());
-        holder.tv_title.setText("标题:"+announcement.getTitle());
-        holder.tv_Atime.setText("发布时间:"+announcement.getAtime());
+        holder.tv_title.setText(announcement.getTitle());
+        holder.tv_Atime.setText(announcement.getAtime());
     }
 
     @Override

@@ -13,7 +13,7 @@
         app:tb_centerGravity="center"
         app:tb_titleText="首页"
         app:tb_useThemeColor="false"
-        android:background="#EF5362"/>
+        android:background="#007FFF"/>
 
 
     <androidx.viewpager.widget.ViewPager

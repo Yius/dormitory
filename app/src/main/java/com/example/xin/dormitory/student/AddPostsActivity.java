@@ -35,7 +35,6 @@ public class AddPostsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_posts);
-
         Toolbar toolbar_chat = findViewById(R.id.toolbar_add_posts);
         toolbar_chat.setTitle("");
         setSupportActionBar(toolbar_chat);

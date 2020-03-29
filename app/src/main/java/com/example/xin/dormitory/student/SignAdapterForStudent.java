@@ -18,6 +18,7 @@ import com.example.xin.dormitory.common.Sign;
 import com.example.xin.dormitory.R;
 import com.example.xin.dormitory.Utility.HttpUtil;
 import com.example.xin.dormitory.Utility.MyApplication;
+import com.xuexiang.xui.widget.button.roundbutton.RoundButton;
 import com.xuexiang.xui.widget.button.shadowbutton.ShadowButton;
 
 import org.json.JSONException;
@@ -52,7 +53,7 @@ public class SignAdapterForStudent extends RecyclerView.Adapter<SignAdapterForSt
         TextView tv_Rtime;
         TextView tv_title;
         TextView tv_houseparentName;
-        ShadowButton sb_sign;
+        RoundButton sb_sign;
 
         public ViewHolder(View view){
             super(view);
@@ -101,51 +102,6 @@ public class SignAdapterForStudent extends RecyclerView.Adapter<SignAdapterForSt
                 intent.putExtra("sign",sign);
                 mContext.startActivity(intent);
                 }
-        });
-        holder.tv_houseparentName.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                int position = holder.getAdapterPosition();
-                String houseparentID = mSignList.get(position).getHouseparentID();
-
-                OkHttpClient client = new OkHttpClient();
-                RequestBody requestBody = new FormBody.Builder().add("ID",houseparentID).build();
-                //服务器地址，ip地址需要时常更换
-                String address=HttpUtil.address+"infoH.php";
-                Request request = new Request.Builder().url(address).post(requestBody).build();
-                //匿名内部类实现回调接口
-                client.newCall(request).enqueue(new okhttp3.Callback(){
-
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        e.printStackTrace();
-                        //TODO 这里可能有问题
-                        ((Activity)mContext).runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(MyApplication.getContext(),"服务器连接失败，无法获取信息",Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        String responseData = response.body().string();
-                        try {
-                            JSONObject jsonObject = new JSONObject(responseData);
-                            //TODO 你来写,jsonObject的内容有：ID,name,govern,phone,password。分别代表宿管ID，宿管姓名，宿管管理楼层，宿管手机号，宿管密码，不一定全部用到
-                            Intent intent = new Intent(MyApplication.getContext(),AddContactsHActivity.class);
-                            intent.putExtra("contactHName",jsonObject.getString("name"));
-                            intent.putExtra("contactHID",jsonObject.getString("ID"));
-                            intent.putExtra("contactHPhone",jsonObject.getString("phone"));
-                            intent.putExtra("contactHGovern",jsonObject.getString("govern"));
-                            MyApplication.getContext().startActivity(intent);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
         });
         return holder;
     }

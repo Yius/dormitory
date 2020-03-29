@@ -19,7 +19,7 @@
     <color name="colorNavLine">#E0E0E0</color>
 
     <color name="tab_unselected">#bfbfbf</color>
-    <color name="tab_selected">#113bdb</color>
+    <color name="tab_selected">#007FFF</color>
 
     <!--宿管端功能按钮背景-->
     <color name="rb_bg_h">#e5e5e5</color>
