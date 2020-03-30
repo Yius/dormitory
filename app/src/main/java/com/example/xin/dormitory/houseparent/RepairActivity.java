@@ -8,6 +8,7 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.xuexiang.xui.widget.guidview.GuideCaseQueue;
 import com.xuexiang.xui.widget.guidview.GuideCaseView;
+import com.xuexiang.xui.widget.guidview.OnViewInflateListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -206,15 +208,32 @@ public class RepairActivity extends AppCompatActivity {
 //        }.start();
 //    }
 
+
+    private GuideCaseView guideCaseView;
+
     private void showTextGuideView() {
         DisplayMetrics outMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
-        new GuideCaseView.Builder(RepairActivity.this)
-                .title("点击可查看不同\n状态的处理申请")
+        guideCaseView = new GuideCaseView.Builder(RepairActivity.this)
                 .focusRectAtPosition(outMetrics.widthPixels - 50, 50, 100, 100)
                 .roundRectRadius(60)
-                .build()
-                .show();
+                .customView(R.layout.glide_for_repair_activity, new OnViewInflateListener() {
+                    @Override
+                    public void onViewInflated(View view) {
+                        view.findViewById(R.id.btn_action_close).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+//                                字符串应保证每个不同的activity都不同
+                                GuideCaseView.setShowOnce(RepairActivity.this,"1");
+                                guideCaseView.hide();
+                            }
+                        });
+                    }
+                })
+                .build();
+        if(!GuideCaseView.isShowOnce(RepairActivity.this,"1")){
+            guideCaseView.show();
+        }
     }
 
 }

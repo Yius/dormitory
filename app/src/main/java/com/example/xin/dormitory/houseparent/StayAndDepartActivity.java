@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.xuexiang.xui.widget.guidview.GuideCaseQueue;
 import com.xuexiang.xui.widget.guidview.GuideCaseView;
+import com.xuexiang.xui.widget.guidview.OnViewInflateListener;
 import com.xuexiang.xui.widget.tabbar.TabControlView;
 
 import org.json.JSONArray;
@@ -258,6 +260,9 @@ public class StayAndDepartActivity extends AppCompatActivity {
         return null;
     }
 
+
+    private GuideCaseView guideStep2;
+
     private void showTextGuideView() {
         DisplayMetrics outMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
@@ -271,16 +276,30 @@ public class StayAndDepartActivity extends AppCompatActivity {
                 .roundRectRadius(60)
                 .build();
 
-        final GuideCaseView guideStep2 = new GuideCaseView.Builder(StayAndDepartActivity.this)
-                .title("点击查看留宿学生信息")
+        guideStep2 = new GuideCaseView.Builder(StayAndDepartActivity.this)
                 .focusRectAtPosition(outMetrics.widthPixels * 3 / 4, actionBarHeight + 50, outMetrics.widthPixels / 2, 60)
                 .roundRectRadius(60)
+                .customView(R.layout.glide_for_stay_and_depart, new OnViewInflateListener() {
+                    @Override
+                    public void onViewInflated(View view) {
+                        view.findViewById(R.id.btn_action_close).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                //                                字符串应保证每个不同的activity都不同
+                                GuideCaseView.setShowOnce(StayAndDepartActivity.this,"3");
+                                guideStep2.hide();
+                            }
+                        });
+                    }
+                })
                 .build();
 
-        new GuideCaseQueue()
-                .add(guideStep1)
-                .add(guideStep2)
-                .show();
+        if(!GuideCaseView.isShowOnce(StayAndDepartActivity.this,"3")){
+            new GuideCaseQueue()
+                    .add(guideStep1)
+                    .add(guideStep2)
+                    .show();
+        }
 
     }
 

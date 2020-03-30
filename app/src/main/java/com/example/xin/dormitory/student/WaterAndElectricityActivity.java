@@ -29,6 +29,7 @@ import com.example.xin.dormitory.houseparent.StayAndDepartActivity;
 import com.xuexiang.xui.widget.guidview.FocusShape;
 import com.xuexiang.xui.widget.guidview.GuideCaseQueue;
 import com.xuexiang.xui.widget.guidview.GuideCaseView;
+import com.xuexiang.xui.widget.guidview.OnViewInflateListener;
 import com.xuexiang.xui.widget.layout.ExpandableLayout;
 import com.xuexiang.xui.widget.textview.supertextview.SuperButton;
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView;
@@ -234,6 +235,7 @@ public class WaterAndElectricityActivity extends AppCompatActivity {
         });
     }
 
+    private GuideCaseView guideStep2;
 
     private void showTextGuideView() {
 
@@ -244,17 +246,31 @@ public class WaterAndElectricityActivity extends AppCompatActivity {
                 .roundRectRadius(90)
                 .build();
 
-        final GuideCaseView guideStep2 = new GuideCaseView.Builder(WaterAndElectricityActivity.this)
-                .title("点击可访问电费查询网址")
+        guideStep2 = new GuideCaseView.Builder(WaterAndElectricityActivity.this)
                 .focusOn(tv_electricity)
                 .focusShape(FocusShape.ROUNDED_RECTANGLE)
                 .roundRectRadius(90)
+                .customView(R.layout.glide_for_water_and_electricity, new OnViewInflateListener() {
+                    @Override
+                    public void onViewInflated(View view) {
+                        view.findViewById(R.id.btn_action_close).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                //                                字符串应保证每个不同的activity都不同
+                                GuideCaseView.setShowOnce(WaterAndElectricityActivity.this,"4");
+                                guideStep2.hide();
+                            }
+                        });
+                    }
+                })
                 .build();
 
-        new GuideCaseQueue()
-                .add(guideStep1)
-                .add(guideStep2)
-                .show();
+        if(!GuideCaseView.isShowOnce(WaterAndElectricityActivity.this,"4")){
+            new GuideCaseQueue()
+                    .add(guideStep1)
+                    .add(guideStep2)
+                    .show();
+        }
 
     }
 }

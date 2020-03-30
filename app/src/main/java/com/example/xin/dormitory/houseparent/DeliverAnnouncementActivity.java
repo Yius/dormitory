@@ -17,6 +17,7 @@ import com.example.xin.dormitory.Utility.HttpUtil;
 import com.example.xin.dormitory.Utility.MyApplication;
 import com.xuexiang.xui.widget.button.ButtonView;
 import com.xuexiang.xui.widget.guidview.GuideCaseView;
+import com.xuexiang.xui.widget.guidview.OnViewInflateListener;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -129,14 +130,31 @@ public class DeliverAnnouncementActivity extends AppCompatActivity{
         }
     }
 
+
+    private GuideCaseView guideCaseView;
+
     private void showTextGuideView() {
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
-        new GuideCaseView.Builder(DeliverAnnouncementActivity.this)
-                .title("点击可查看历史通知")
+
+        guideCaseView = new GuideCaseView.Builder(DeliverAnnouncementActivity.this)
                 .focusOn(tv_history)
-                .build()
-                .show();
+                .customView(R.layout.glide_for_deliver_announcement, new OnViewInflateListener() {
+                    @Override
+                    public void onViewInflated(View view) {
+                        view.findViewById(R.id.btn_action_close).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                //                                字符串应保证每个不同的activity都不同
+                                GuideCaseView.setShowOnce(DeliverAnnouncementActivity.this,"2");
+                                guideCaseView.hide();
+                            }
+                        });
+                    }
+                })
+                .build();
+        if(!GuideCaseView.isShowOnce(DeliverAnnouncementActivity.this,"2")){
+            guideCaseView.show();
+        }
+
     }
 
 }
