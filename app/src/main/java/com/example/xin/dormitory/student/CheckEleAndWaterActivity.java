@@ -19,18 +19,7 @@ public class CheckEleAndWaterActivity extends AppCompatActivity {
         wv_view = findViewById(R.id.wv_view);
         wv_view.getSettings().setJavaScriptEnabled(true);
         wv_view.setWebViewClient(new WebViewClient());
-        String source = getIntent().getStringExtra("source");
-        String url = null;
-        switch (source){
-            case "water":
-                url = HttpUtil.waterCheck;
-                break;
-            case "electricity":
-                url = HttpUtil.electricityCheck;
-                break;
-            default:
-                break;
-        }
+        String url = getIntent().getStringExtra("url");
         wv_view.loadUrl(url);
     }
 }

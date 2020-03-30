@@ -117,10 +117,10 @@ public class MainSActivity extends AppCompatActivity {
 
     //保存登录用户的信息及初始化水电费地址
     private void saveInfo(){
-        //初始化HttpUtil中的水电费地址
-        SharedPreferences pref = getSharedPreferences("data",MODE_PRIVATE);
-        HttpUtil.waterCheck = pref.getString("waterCheck",null);
-        HttpUtil.electricityCheck = pref.getString("electricityCheck",null);
+//        //初始化HttpUtil中的水电费地址
+//        SharedPreferences pref = getSharedPreferences("data",MODE_PRIVATE);
+//        HttpUtil.waterCheck = pref.getString("waterCheck",null);
+//        HttpUtil.electricityCheck = pref.getString("electricityCheck",null);
         //把信息存到sharedpreferences里
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = new FormBody.Builder().add("ID",HttpUtil.ID).build();

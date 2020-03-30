@@ -205,6 +205,7 @@ public class IndexSFragment extends Fragment {
                     //水电费水电费
                     intent = new Intent(getActivity(), WaterAndElectricityActivity.class);
                     intent.putExtra("dormID",getActivity().getSharedPreferences("data",getActivity().MODE_PRIVATE).getString("dormID",""));
+                    intent.putExtra("dorm",getActivity().getSharedPreferences("data",getActivity().MODE_PRIVATE).getString("belong",""));
                     break;
                 case R.id.rl_lisu:
                     intent = new Intent(getActivity(),DepartRegisterActivity.class);

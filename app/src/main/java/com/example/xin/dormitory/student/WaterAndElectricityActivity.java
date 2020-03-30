@@ -6,6 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.Call;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -14,9 +20,11 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.xin.dormitory.R;
 import com.example.xin.dormitory.Utility.HttpUtil;
+import com.example.xin.dormitory.Utility.MyApplication;
 import com.example.xin.dormitory.houseparent.StayAndDepartActivity;
 import com.xuexiang.xui.widget.guidview.FocusShape;
 import com.xuexiang.xui.widget.guidview.GuideCaseQueue;
@@ -24,6 +32,11 @@ import com.xuexiang.xui.widget.guidview.GuideCaseView;
 import com.xuexiang.xui.widget.layout.ExpandableLayout;
 import com.xuexiang.xui.widget.textview.supertextview.SuperButton;
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 /**
  * 水电费界面（oyx新加）
@@ -62,6 +75,8 @@ public class WaterAndElectricityActivity extends AppCompatActivity {
     TextView dormID;
 
     private ActionBar actionBar;
+    String waterUrl = null;
+    String electricityUrl = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,25 +84,68 @@ public class WaterAndElectricityActivity extends AppCompatActivity {
         setContentView(R.layout.activity_water_and_electricity);
         ButterKnife.bind(this);
         initToolbar();
+        initUrls();
         initDormID();
-        initTextView();
         initWater();
         initElectricity();
         showTextGuideView();
     }
 
     private void initToolbar() {
-//        setSupportActionBar(toolbar);
-//        actionBar = getSupportActionBar();
-//        if (toolbar != null) {
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//            actionBar.setTitle("水电费");
-//            toolbar.setTitleTextColor(Color.WHITE);
-//        }
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void initUrls(){
+        String dorm = getIntent().getStringExtra("dorm");
+        if(dorm!=null&&!dorm.equals("")){
+            OkHttpClient client = new OkHttpClient();
+            RequestBody requestBody = new FormBody.Builder().add("dorm",dorm).build();
+            //服务器地址，ip地址需要时常更换
+            String address=HttpUtil.address+"getWaterAndElectricity.php";
+            Request request = new Request.Builder().url(address).post(requestBody).build();
+            //匿名内部类实现回调接口
+            client.newCall(request).enqueue(new okhttp3.Callback(){
+
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MyApplication.getContext(),"服务器连接失败，无法获取水电费网址",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String responseData = response.body().string();
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseData);
+                        waterUrl = jsonObject.getString("waterUrl");
+                        electricityUrl = jsonObject.getString("electricityUrl");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                initTextView();
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }else{
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(MyApplication.getContext(),"你所属宿舍楼为空，无法获取水电费网址",Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     private void initDormID(){
@@ -95,28 +153,26 @@ public class WaterAndElectricityActivity extends AppCompatActivity {
     }
 
     private void initTextView(){
-        HttpUtil.waterCheck = "https://ssp.scnu.edu.cn/";
-        HttpUtil.electricityCheck="https://ssp.scnu.edu.cn/";
-        if(HttpUtil.waterCheck!=null&&HttpUtil.waterCheck!=""){
-            web_site_water.setText(HttpUtil.waterCheck);
+        if(waterUrl!=null&&!waterUrl.equals("")){
+            web_site_water.setText(waterUrl);
             water.setVisibility(View.VISIBLE);
             water.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(WaterAndElectricityActivity.this,CheckEleAndWaterActivity.class);
-                    intent.putExtra("source","water");
+                    intent.putExtra("url",waterUrl);
                     startActivity(intent);
                 }
             });
         }
-        if(HttpUtil.electricityCheck!=null&&HttpUtil.electricityCheck!=""){
-            web_site_electricity.setText(HttpUtil.electricityCheck);
+        if(electricityUrl!=null&&!electricityUrl.equals("")){
+            web_site_electricity.setText(electricityUrl);
             electricity.setVisibility(View.VISIBLE);
             electricity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(WaterAndElectricityActivity.this,CheckEleAndWaterActivity.class);
-                    intent.putExtra("source","electricity");
+                    intent.putExtra("url",electricityUrl);
                     startActivity(intent);
                 }
             });
