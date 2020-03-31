@@ -49,6 +49,7 @@ public class CheckUnsignedStudentsActivity extends AppCompatActivity {
         adapter = new SimpleStudentInfoAdapter(simpleStudentInfoList);
         recyclerView.setAdapter(adapter);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

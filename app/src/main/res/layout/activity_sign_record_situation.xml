@@ -27,8 +27,8 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh"
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/smart_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar">
@@ -40,7 +40,8 @@
 
 
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

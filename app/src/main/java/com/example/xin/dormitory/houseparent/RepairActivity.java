@@ -1,9 +1,13 @@
 package com.example.xin.dormitory.houseparent;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.Menu;
@@ -14,10 +18,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.xin.dormitory.R;
+import com.example.xin.dormitory.Utility.ExcelUtil;
 import com.example.xin.dormitory.Utility.HttpUtil;
 import com.example.xin.dormitory.Utility.MyApplication;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -31,6 +38,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +89,7 @@ public class RepairActivity extends AppCompatActivity {
                 refreshRepairs();
             }
         });
+        firstCheck();
 
         showTextGuideView();
     }
@@ -191,6 +200,10 @@ public class RepairActivity extends AppCompatActivity {
             case R.id.show_all:
                 which = "2";
                 smartRefresh.autoRefresh();
+                break;
+            case R.id.export_excel:
+                generateExcel();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -224,15 +237,107 @@ public class RepairActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
 //                                字符串应保证每个不同的activity都不同
-                                GuideCaseView.setShowOnce(RepairActivity.this,"1");
+                                GuideCaseView.setShowOnce(RepairActivity.this, "1");
                                 guideCaseView.hide();
                             }
                         });
                     }
                 })
                 .build();
-        if(!GuideCaseView.isShowOnce(RepairActivity.this,"1")){
+        if (!GuideCaseView.isShowOnce(RepairActivity.this, "1")) {
             guideCaseView.show();
+        }
+    }
+
+    private void generateExcel() {
+        SharedPreferences preff = getSharedPreferences("dataH", MODE_PRIVATE);
+        OkHttpClient clientt = new OkHttpClient();
+        RequestBody requestBody = new FormBody.Builder().add("which", "2").add("govern", preff.getString("govern", "")).build();
+        //服务器地址，ip地址需要时常更换
+        String address = HttpUtil.address + "getRepairInfo.php";
+        Request request = new Request.Builder().url(address).post(requestBody).build();
+        //匿名内部类实现回调接口
+        clientt.newCall(request).enqueue(new okhttp3.Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MyApplication.getContext(), "服务器连接失败，无法获取信息", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseData = response.body().string();
+                try {
+                    JSONArray jsonArray = new JSONArray(responseData);
+                    for (int i = 0; i < jsonArray.length(); ++i) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        repairList.add(new Repair(jsonObject));
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MyApplication.getContext(), "开始生成excel文件", Toast.LENGTH_SHORT).show();
+                            exportExcel(MyApplication.getContext());
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void exportExcel(Context context) {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        String filePath = this.filePath + "/维修申请表.xls";
+        String[] title = {"申请编号", "申请时间", "申请宿舍", "维修物品", "损坏原因", "详情描述", "联系方式", "其他备注", "处理状态"};
+        ExcelUtil.initExcel(filePath, "维修申请", title);
+        ExcelUtil.writeRepairListToExcel(repairList, filePath, context);
+    }
+
+
+    private String filePath = Environment.getExternalStorageDirectory() + "/dormitory";
+
+    String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    //2、创建一个mPermissionList，逐个判断哪些权限未授予，未授予的权限存储到mPerrrmissionList中
+    List<String> mPermissionList = new ArrayList<>();
+
+    private final int mRequestCode = 100;//权限请求码
+
+
+    public void firstCheck() {
+        mPermissionList.clear();//清空没有通过的权限
+        //逐个判断你要的权限是否已经通过
+        for (int i = 0; i < permissions.length; i++) {
+            if (ContextCompat.checkSelfPermission(this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
+                mPermissionList.add(permissions[i]);//添加还未授予的权限
+            }
+        }
+        //申请权限
+        if (mPermissionList.size() > 0) {//有权限没有通过，需要申请
+            ActivityCompat.requestPermissions(this, permissions, mRequestCode);
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        //可在此继续其他操作。
+        for (int result : grantResults) {
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(MyApplication.getContext(), "缺少必要的权限！", Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
     }
 

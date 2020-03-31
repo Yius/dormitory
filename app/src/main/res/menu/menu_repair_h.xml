@@ -16,4 +16,9 @@
         android:id="@+id/show_unhandled"
         android:title="仅显示未处理的"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/export_excel"
+        android:title="导出维修申请Excel表"
+        app:showAsAction="never" />
 </menu>

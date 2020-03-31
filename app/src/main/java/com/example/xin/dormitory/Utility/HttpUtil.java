@@ -47,6 +47,7 @@ public class HttpUtil {
              * 17代表删除帖子成功并删除存在sendmessageinfo表中有关该帖的信息成功
              * 18代表设置水电网址成功
              * 19代表头像上传成功
+             * 20代表签到记录删除成功
              * -1代表学生不存在
              * -2代表学生密码错误
              * -3代表学生已注册过
@@ -73,6 +74,7 @@ public class HttpUtil {
              * -24代表设置水电网址失败
              * -25代表上传图片为空
              * -26代表上传图片失败
+             * -27代表签到记录删除失败
              */
             String status = jsonObject.getString("status");
             switch (status){
@@ -95,6 +97,7 @@ public class HttpUtil {
                 case"17":return true;
                 case"18":return true;
                 case"19":return true;
+                case"20":return true;
                 default: return false;
             }
         } catch (JSONException e) {

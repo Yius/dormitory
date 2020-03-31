@@ -1,6 +1,7 @@
 package com.example.xin.dormitory.houseparent;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -29,6 +30,10 @@ import com.example.xin.dormitory.Utility.HttpUtil;
 import com.example.xin.dormitory.Utility.MyApplication;
 import com.example.xin.dormitory.common.Sign;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshHeader;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.xuexiang.xui.widget.dialog.materialdialog.DialogAction;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 
@@ -37,6 +42,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,7 +64,7 @@ public class SignRecordSituationActivity extends AppCompatActivity {
 
     private List<Sign> signList = new ArrayList<>();
     private SignAdapterForHouseparent adapter;
-    private SwipeRefreshLayout swipeRefresh;
+    private SmartRefreshLayout smartRefresh;
     private FloatingActionButton fab;
 
     //声明AMapLocationClient类对象
@@ -85,11 +91,19 @@ public class SignRecordSituationActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        swipeRefresh = findViewById(R.id.swipe_refresh);
-        swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//        swipeRefresh = findViewById(R.id.swipe_refresh);
+//        swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
+//        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                refreshSignStudents();
+//            }
+//        });
+        smartRefresh = findViewById(R.id.smart_refresh);
+        smartRefresh.setRefreshHeader(getRefreshHeader("PhoenixHeader"));
+        smartRefresh.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onRefresh() {
+            public void onRefresh(RefreshLayout refreshLayout) {
                 refreshSignStudents();
             }
         });
@@ -204,7 +218,7 @@ public class SignRecordSituationActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         initSignRecords();
-                        swipeRefresh.setRefreshing(false);
+                        smartRefresh.finishRefresh();
                     }
                 });
             }
@@ -335,6 +349,17 @@ public class SignRecordSituationActivity extends AppCompatActivity {
                 return;
             }
         }
+    }
+
+    private RefreshHeader getRefreshHeader(String name) {
+        try {
+            Class<?> headerClass = Class.forName("com.scwang.smartrefresh.header." + name);
+            Constructor<?> constructor = headerClass.getConstructor(Context.class);
+            return  (RefreshHeader) constructor.newInstance(MyApplication.getContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
