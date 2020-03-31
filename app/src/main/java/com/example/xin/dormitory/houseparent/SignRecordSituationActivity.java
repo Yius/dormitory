@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -36,6 +37,8 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.xuexiang.xui.widget.dialog.materialdialog.DialogAction;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
+import com.xuexiang.xui.widget.guidview.GuideCaseView;
+import com.xuexiang.xui.widget.guidview.OnViewInflateListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -91,14 +94,6 @@ public class SignRecordSituationActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-//        swipeRefresh = findViewById(R.id.swipe_refresh);
-//        swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
-//        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                refreshSignStudents();
-//            }
-//        });
         smartRefresh = findViewById(R.id.smart_refresh);
         smartRefresh.setRefreshHeader(getRefreshHeader("PhoenixHeader"));
         smartRefresh.setOnRefreshListener(new OnRefreshListener() {
@@ -123,33 +118,10 @@ public class SignRecordSituationActivity extends AppCompatActivity {
 
 
         firstCheck();
-        //初始化定位
-        mLocationClient = new AMapLocationClient(getApplicationContext());
-        //初始化AMapLocationClientOption对象
-        mLocationOption = new AMapLocationClientOption();
-        mLocationListener = new AMapLocationListener(){
-            @Override
-            public void onLocationChanged(AMapLocation amapLocation) {
-                if (amapLocation != null) {
-                    if (amapLocation.getErrorCode() == 0) {
-                        aMapLocation = amapLocation;
-                    }else {
-                        Toast.makeText(SignRecordSituationActivity.this,"很抱歉，无法获取您的定位信息！",Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        };
-        //设置定位回调监听
-        mLocationClient.setLocationListener(mLocationListener);
-        mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
-        //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
-        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-        if(null != mLocationClient){
-            mLocationClient.setLocationOption(mLocationOption);
-        }
-        mLocationClient.stopLocation();
-        mLocationClient.startLocation();
 
+        initMapAndLocation();
+
+        showTextGuideView();
     }
 
     /**
@@ -360,6 +332,60 @@ public class SignRecordSituationActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return null;
+    }
+
+
+    private GuideCaseView guideCaseView;
+
+    private void showTextGuideView() {
+        guideCaseView = new GuideCaseView.Builder(SignRecordSituationActivity.this)
+                .customView(R.layout.glide_for_sign_record_situation_activity, new OnViewInflateListener() {
+                    @Override
+                    public void onViewInflated(View view) {
+                        view.findViewById(R.id.btn_action_close).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+//                                字符串应保证每个不同的activity都不同
+                                GuideCaseView.setShowOnce(SignRecordSituationActivity.this, "5");
+                                guideCaseView.hide();
+                            }
+                        });
+                    }
+                })
+                .build();
+        if (!GuideCaseView.isShowOnce(SignRecordSituationActivity.this, "5")) {
+            guideCaseView.show();
+        }
+    }
+
+
+    public void initMapAndLocation(){
+        //初始化定位
+        mLocationClient = new AMapLocationClient(getApplicationContext());
+        //初始化AMapLocationClientOption对象
+        mLocationOption = new AMapLocationClientOption();
+        mLocationListener = new AMapLocationListener(){
+            @Override
+            public void onLocationChanged(AMapLocation amapLocation) {
+                if (amapLocation != null) {
+                    if (amapLocation.getErrorCode() == 0) {
+                        aMapLocation = amapLocation;
+                    }else {
+                        Toast.makeText(SignRecordSituationActivity.this,"很抱歉，无法获取您的定位信息！",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        };
+        //设置定位回调监听
+        mLocationClient.setLocationListener(mLocationListener);
+        mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
+        //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        if(null != mLocationClient){
+            mLocationClient.setLocationOption(mLocationOption);
+        }
+        mLocationClient.stopLocation();
+        mLocationClient.startLocation();
     }
 
 }
