@@ -167,6 +167,11 @@
             android:name=".student.friends_list.MyFriendsActivity"
             android:label="我的好友"
             android:launchMode="singleTop" />
+        <activity
+            android:name=".student.ContactUs"
+            android:label="联系我们"
+            android:launchMode="singleTop"
+            android:parentActivityName=".student.MainSActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
