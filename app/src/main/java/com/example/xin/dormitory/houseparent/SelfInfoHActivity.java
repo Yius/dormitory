@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.xin.dormitory.R;
+import com.example.xin.dormitory.Utility.AvatarUtil;
 import com.example.xin.dormitory.Utility.HttpUtil;
 import com.example.xin.dormitory.Utility.MyApplication;
 import com.xuexiang.xui.widget.dialog.bottomsheet.BottomSheet;
@@ -81,12 +82,12 @@ public class SelfInfoHActivity extends AppCompatActivity {
         tv_name.setText(pref.getString("name",""));
         tv_ID.setText(pref.getString("ID",""));
         radiusImageView = findViewById(R.id.photo);
+        AvatarUtil.setAvatar(this,radiusImageView,tv_ID.getText().toString(),"houseparent");
         setListeners();
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        loadAvatar();
     }
 
     /**
@@ -151,6 +152,7 @@ public class SelfInfoHActivity extends AppCompatActivity {
                                         Toast.makeText(MyApplication.getContext(),"修改失败",Toast.LENGTH_SHORT).show();
                                     }
                                 });
+
                             }
                         }
                     });
@@ -320,49 +322,17 @@ public class SelfInfoHActivity extends AppCompatActivity {
                             Toast.makeText(MyApplication.getContext(), "图片上传成功！", Toast.LENGTH_SHORT).show();
                         }
                     });
-                }
-            }
-        });
-    }
-
-    private void loadAvatar() {
-
-        OkHttpClient client = new OkHttpClient();
-        RequestBody requestBody = new FormBody.Builder().add("ID", HttpUtil.HID).add("type", "houseparent").build();
-        //服务器地址，ip地址需要时常更换
-        String address = HttpUtil.address + "getAvatar.php";
-        Request request = new Request.Builder().url(address).post(requestBody).build();
-        //匿名内部类实现回调接口
-        client.newCall(request).enqueue(new okhttp3.Callback() {
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MyApplication.getContext(), "连接失败，无法获取您的头像", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                InputStream inputStream = response.body().byteStream();
-                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                byte[] check = new byte[1024];
-                //判断是否为空
-                if (inputStream.read(check)==-1) {
-                    //记得更新图片要在UI线程
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    //上传图片成功后保存图片到本地
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            radiusImageView.setImageBitmap(bitmap);
+                            AvatarUtil.saveFile(SelfInfoHActivity.this,bitmap,"houseparent_"+pref.getString("ID",""));
                         }
                     });
                 }
             }
         });
     }
+
 
 }

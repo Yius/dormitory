@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.xin.dormitory.R;
+import com.example.xin.dormitory.Utility.AvatarUtil;
 import com.example.xin.dormitory.Utility.HttpUtil;
 import com.example.xin.dormitory.Utility.MyApplication;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -96,6 +97,7 @@ public class MainHActivity extends AppCompatActivity {
                     editor.putString("phone",jsonObject.getString("phone"));
                     editor.putString("govern",jsonObject.getString("govern"));
                     editor.apply();
+                    AvatarUtil.loadAvatar(jsonObject.getString("ID"),"houseparent");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.xin.dormitory.R;
+import com.example.xin.dormitory.Utility.AvatarUtil;
 import com.example.xin.dormitory.Utility.HttpUtil;
 import com.example.xin.dormitory.Utility.MyApplication;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
@@ -88,6 +89,7 @@ public class MeHFragment extends Fragment {
         id.setText(pref.getString("ID", ""));
         govern.setText(pref.getString("govern", ""));
         radiusImageView = getView().findViewById(R.id.personal_img);
+        AvatarUtil.setAvatar(getContext(),radiusImageView,id.getText().toString(),"houseparent");
     }
 
     //个人信息和设置点击事件
@@ -114,50 +116,9 @@ public class MeHFragment extends Fragment {
         }
     }
 
-    private void loadAvatar() {
-
-        OkHttpClient client = new OkHttpClient();
-        RequestBody requestBody = new FormBody.Builder().add("ID", HttpUtil.HID).add("type", "houseparent").build();
-        //服务器地址，ip地址需要时常更换
-        String address = HttpUtil.address + "getAvatar.php";
-        Request request = new Request.Builder().url(address).post(requestBody).build();
-        //匿名内部类实现回调接口
-        client.newCall(request).enqueue(new okhttp3.Callback() {
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MyApplication.getContext(), "连接失败，无法获取您的头像", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                InputStream inputStream = response.body().byteStream();
-                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                byte[] check = new byte[1024];
-                //判断是否为空
-                if (inputStream.read(check)==-1) {
-                    //记得更新图片要在UI线程
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            radiusImageView.setImageBitmap(bitmap);
-                        }
-                    });
-                }
-            }
-        });
-    }
-
     @Override
-    public void onStart(){
-        super.onStart();
-        loadAvatar();
+    public void onResume() {
+        super.onResume();
+        initData();
     }
-
 }
