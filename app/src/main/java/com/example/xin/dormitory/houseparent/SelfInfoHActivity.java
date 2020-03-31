@@ -8,6 +8,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
@@ -15,6 +16,8 @@ import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -28,12 +31,17 @@ import com.example.xin.dormitory.R;
 import com.example.xin.dormitory.Utility.HttpUtil;
 import com.example.xin.dormitory.Utility.MyApplication;
 import com.xuexiang.xui.widget.dialog.bottomsheet.BottomSheet;
+import com.xuexiang.xui.widget.imageview.RadiusImageView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import okhttp3.Call;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -49,6 +57,7 @@ public class SelfInfoHActivity extends AppCompatActivity {
     private static final int CROP_SMALL_PICTURE = 2;
     protected static Uri tempUri;
     private ImageView iv_avatar;
+    private RadiusImageView radiusImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +80,13 @@ public class SelfInfoHActivity extends AppCompatActivity {
         tv_govern.setText(pref.getString("govern",""));
         tv_name.setText(pref.getString("name",""));
         tv_ID.setText(pref.getString("ID",""));
+        radiusImageView = findViewById(R.id.photo);
         setListeners();
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        loadAvatar();
     }
 
     /**
@@ -174,9 +185,15 @@ public class SelfInfoHActivity extends AppCompatActivity {
                                         startActivityForResult(intent, TAKE_PICTURE);
                                     }
                                     else if(position==1){
-                                        Intent openAlbumIntent = new Intent(
-                                                Intent.ACTION_GET_CONTENT);
-                                        openAlbumIntent.setType("image/*");
+                                        Intent openAlbumIntent = new Intent();
+                                        if (Build.VERSION.SDK_INT < 19) {
+                                            openAlbumIntent.setAction(Intent.ACTION_GET_CONTENT);
+                                            openAlbumIntent.setType("image/*");
+                                        }
+                                        else {
+                                            openAlbumIntent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                            openAlbumIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
+                                        }
                                         startActivityForResult(openAlbumIntent, CHOOSE_PICTURE);
                                     }
                                 }
@@ -249,8 +266,103 @@ public class SelfInfoHActivity extends AppCompatActivity {
             matrix.postScale(scaleWidth, scaleHeight);
             Bitmap newphoto = Bitmap.createBitmap(photo, 0, 0, width, height, matrix, true);//处理图片大小
             iv_avatar.setImageBitmap(newphoto);
-//            uploadPic(photo);  上传到服务器
+            uploadNewAvatar(newphoto);
         }
+    }
+
+    private void uploadNewAvatar(Bitmap bitmap){
+        OkHttpClient client = new OkHttpClient();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] datas = baos.toByteArray();
+        // 设置文件以及文件上传类型封装
+        RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpg"), datas);
+
+        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+        // 文件上传的请求体封装
+        MultipartBody multipartBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("avatar", "houseparent_"+pref.getString("ID","")+".png", requestBody)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(HttpUtil.address + "uploadAvatar.php")
+                .post(multipartBody)
+                .build();
+
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MyApplication.getContext(), "连接失败", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseData = response.body().string();
+                if(!HttpUtil.parseSimpleJSONData(responseData)){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MyApplication.getContext(), "图片上传失败！", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }else{
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MyApplication.getContext(), "图片上传成功！", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void loadAvatar() {
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = new FormBody.Builder().add("ID", HttpUtil.HID).add("type", "houseparent").build();
+        //服务器地址，ip地址需要时常更换
+        String address = HttpUtil.address + "getAvatar.php";
+        Request request = new Request.Builder().url(address).post(requestBody).build();
+        //匿名内部类实现回调接口
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MyApplication.getContext(), "连接失败，无法获取您的头像", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                InputStream inputStream = response.body().byteStream();
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                byte[] check = new byte[1024];
+                //判断是否为空
+                if (inputStream.read(check)==-1) {
+                    //记得更新图片要在UI线程
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            radiusImageView.setImageBitmap(bitmap);
+                        }
+                    });
+                }
+            }
+        });
     }
 
 }

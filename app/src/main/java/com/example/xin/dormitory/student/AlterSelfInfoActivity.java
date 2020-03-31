@@ -30,12 +30,17 @@ import com.example.xin.dormitory.Utility.MyApplication;
 import com.example.xin.dormitory.R;
 import com.xuexiang.xui.widget.dialog.bottomsheet.BottomSheet;
 
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
 
 import okhttp3.Call;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -229,12 +234,12 @@ public class AlterSelfInfoActivity extends AppCompatActivity {
             }
         }
     }
+
     protected void startPhotoZoom(Uri uri,int requestCode) {
         if (uri == null) {
             Log.i("tag", "The uri is not exist.");
         }
         tempUri = uri;
-        System.out.println("uri"+tempUri);
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
         if(requestCode==TAKE_PICTURE){
@@ -268,8 +273,64 @@ public class AlterSelfInfoActivity extends AppCompatActivity {
             matrix.postScale(scaleWidth, scaleHeight);
             Bitmap newphoto = Bitmap.createBitmap(photo, 0, 0, width, height, matrix, true);//处理图片大小
             iv_avatar.setImageBitmap(newphoto);
-//            uploadPic(photo);  上传到服务器
+            uploadNewAvatar(newphoto);
+
         }
+    }
+
+    private void uploadNewAvatar(Bitmap bitmap){
+        OkHttpClient client = new OkHttpClient();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] datas = baos.toByteArray();
+        // 设置文件以及文件上传类型封装
+        RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpg"), datas);
+
+        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+        // 文件上传的请求体封装
+        MultipartBody multipartBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("avatar", "student_"+pref.getString("ID","")+".png", requestBody)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(HttpUtil.address + "uploadAvatar.php")
+                .post(multipartBody)
+                .build();
+
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MyApplication.getContext(), "连接失败", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseData = response.body().string();
+                if(!HttpUtil.parseSimpleJSONData(responseData)){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MyApplication.getContext(), "图片上传失败！", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }else{
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MyApplication.getContext(), "图片上传成功！", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
     }
 
 
