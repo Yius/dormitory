@@ -98,7 +98,6 @@ public class PostsSFragment extends Fragment {
                         for(int i=0;i<jsonArray.length();i++){
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             Post post = new Post();
-                            post.setImageId(R.drawable.portrait_s);
                             post.setPosterName(jsonObject.getString("name"));
                             post.setPosterID(jsonObject.getString("ID"));
 //                            String PostsDate = jsonObject.getString("PostsDate").substring(0,10);

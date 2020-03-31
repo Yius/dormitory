@@ -17,6 +17,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -30,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.xin.dormitory.R;
+import com.example.xin.dormitory.Utility.AvatarUtil;
 import com.example.xin.dormitory.Utility.HttpUtil;
 import com.example.xin.dormitory.Utility.MyApplication;
 import com.google.android.material.appbar.AppBarLayout;
@@ -41,6 +43,7 @@ import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.xuexiang.xui.utils.StatusBarUtils;
+import com.xuexiang.xui.widget.imageview.RadiusImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,6 +72,9 @@ public class PersonalInfoActivity extends AppCompatActivity {
 
     @BindView(R.id.rv_personal_posts)
     RecyclerView recyclerView;
+
+    @BindView(R.id.personal_img)
+    RadiusImageView personalImg;
 
     @BindView(R.id.personal_name)
     TextView personalName;
@@ -112,7 +118,6 @@ public class PersonalInfoActivity extends AppCompatActivity {
         initListener();
         initToolbar();
         initCollapsingToolbar();
-        //initImageView();
         initPosts();
         initRecyclerView();
         ActionBar actionBar = getSupportActionBar();
@@ -149,6 +154,8 @@ public class PersonalInfoActivity extends AppCompatActivity {
         id.setText(pref.getString("ID",""));
         dormID.setText(pref.getString("dormID",""));
         personalName.setText(pref.getString("name",""));
+        //获取头像
+        AvatarUtil.setAvatar(this,personalImg,id.getText().toString(),"student");
     }
     private void initToolbar(){
         setSupportActionBar(toolbar);
@@ -230,7 +237,6 @@ public class PersonalInfoActivity extends AppCompatActivity {
                         for(int i=0;i<jsonArray.length();i++){
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             Post post = new Post();
-                            post.setImageId(R.drawable.portrait_s);
                             post.setPosterName(jsonObject.getString("name"));
                             post.setPosterID(jsonObject.getString("ID"));
 //                            String PostsDate = jsonObject.getString("PostsDate").substring(0,10);
@@ -310,12 +316,14 @@ public class PersonalInfoActivity extends AppCompatActivity {
                     String idData = data.getStringExtra("ID");
                     String dormIDData = data.getStringExtra("dormID");
                     String phoneData = data.getStringExtra("phone");
-                    Log.d("dad",nameData);
                     personalName.setText(nameData);
                     nickname.setText(nicknameData);
                     phone.setText(phoneData);
                     id.setText(idData);
                     dormID.setText(dormIDData);
+                    //更新修改后的头像
+                    AvatarUtil.setAvatar(this,personalImg,id.getText().toString(),"student");
+
                     SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
                     editor.putString("nickname", nicknameData);
                     editor.putString("phone", phoneData);
@@ -328,5 +336,11 @@ public class PersonalInfoActivity extends AppCompatActivity {
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshPosts();
     }
 }

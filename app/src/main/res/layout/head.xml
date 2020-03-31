@@ -17,6 +17,7 @@
             android:layout_height="80dp"
             app:riv_is_circle="true"
             android:src="@drawable/portrait_s"
+            android:id="@+id/head_avatar"
             />
         <TextView
             android:id="@+id/tv_head_name"

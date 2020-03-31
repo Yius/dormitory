@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.xin.dormitory.R;
+import com.example.xin.dormitory.Utility.AvatarUtil;
 import com.example.xin.dormitory.Utility.HttpUtil;
 import com.example.xin.dormitory.Utility.MyApplication;
 
@@ -123,7 +124,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             e.printStackTrace();
         }
 
-        Glide.with(mContext).load(post.getImageId()).into(holder.posterImage);
+        AvatarUtil.setAvatar(MyApplication.getContext(),holder.posterImage,post.getPosterID(),"student");
     }
 
     @Override

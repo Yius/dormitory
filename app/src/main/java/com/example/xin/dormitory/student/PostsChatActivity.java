@@ -1,7 +1,11 @@
 package com.example.xin.dormitory.student;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.drm.DrmStore;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,20 +13,28 @@ import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
+
+import android.os.Handler;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.example.xin.dormitory.R;
+import com.example.xin.dormitory.Utility.AvatarUtil;
 import com.example.xin.dormitory.Utility.HttpUtil;
 import com.example.xin.dormitory.Utility.MyApplication;
 
@@ -52,6 +64,7 @@ import okhttp3.Response;
 
 public class PostsChatActivity extends AppCompatActivity {
     private EditText inputText;
+    private LinearLayout layout_input_text;
     private Button bt_send;
     private RecyclerView msgRecyclerView;
     private Button bt_show_details;
@@ -69,6 +82,20 @@ public class PostsChatActivity extends AppCompatActivity {
     private Drawable ic_hide;
     private Spannable sp;
     private boolean isConnect;
+
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(android.os.Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 0:
+                    msgRecyclerView.scrollToPosition(msgList.size()-1);
+                    break;
+            }
+        }
+
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -87,6 +114,7 @@ public class PostsChatActivity extends AppCompatActivity {
         initMessage();
 
         inputText = findViewById(R.id.input_text);
+        layout_input_text = findViewById(R.id.layout_input_text);
         bt_send = findViewById(R.id.bt_send);
         msgRecyclerView = findViewById(R.id.rv_chat);
         bt_show_details = findViewById(R.id.bt_show_details);
@@ -109,6 +137,24 @@ public class PostsChatActivity extends AppCompatActivity {
         sp  = new SpannableString(details);
         sp.setSpan(new AbsoluteSizeSpan(25,true),0, Title.length(),Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         sp.setSpan(new AbsoluteSizeSpan(17,true),details.length()-Content.length(), details.length(),Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        layout_input_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inputText.requestFocus();
+                showSoftInput(PostsChatActivity.this, inputText);
+                handler.sendEmptyMessageDelayed(0,250);
+//                msgRecyclerView.scrollToPosition(msgList.size()-1);
+            }
+        });
+
+        msgRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                hideSoftInput(PostsChatActivity.this, inputText);
+                return false;
+            }
+        });
 
         bt_show_details.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,7 +185,7 @@ public class PostsChatActivity extends AppCompatActivity {
                                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                 String sendTime = formatter.format(new Date(System.currentTimeMillis()));
                                 Message msg = new Message();
-                                msg.setImageId(R.drawable.portrait_s);
+                                msg.setId(SenderID);
                                 msg.setContent(message);
                                 msg.setType(Message.TYPE_SENT);
                                 msgList.add(msg);
@@ -153,7 +199,7 @@ public class PostsChatActivity extends AppCompatActivity {
                                     }
                                 });
                                 try {
-                                    writer.write(PostsID + " " + SenderName + " " + message + "\n");
+                                    writer.write(PostsID + " " +SenderID+" "+ SenderName + " " + message + "\n");
                                     writer.flush();
                                 } catch (IOException e) {
                                     e.printStackTrace();
@@ -175,6 +221,18 @@ public class PostsChatActivity extends AppCompatActivity {
         });
 //        reFresh();
     }
+
+    public static void showSoftInput(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
+    }
+
+    public static void hideSoftInput(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+    }
+
 
     @Override
     protected void onDestroy() {
@@ -241,9 +299,9 @@ public class PostsChatActivity extends AppCompatActivity {
                     String recvPostsID = splited[0];
                     if (recvPostsID.equals(PostsID)) {
                         Message msg = new Message();
-                        msg.setImageId(R.drawable.portrait_s);
-                        msg.setName(splited[1]);
-                        msg.setContent(splited[2]);
+                        msg.setId(splited[1]);
+                        msg.setName(splited[2]);
+                        msg.setContent(splited[3]);
                         msg.setType(Message.TYPE_RECEIVED);
                         msgList.add(msg);
                         adapter.notifyItemInserted(msgList.size() - 1);
@@ -354,6 +412,7 @@ public class PostsChatActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
 //    private void reFresh(){
 //        new Thread(new Runnable() {
 //            @Override
@@ -418,7 +477,7 @@ public class PostsChatActivity extends AppCompatActivity {
                 holder.leftLayout.setVisibility(View.VISIBLE);
                 holder.rightLayout.setVisibility(View.GONE);
                 holder.leftMsg.setText(msg.getContent());
-                holder.left_chatter_image.setImageResource(msg.getImageId());
+                AvatarUtil.setAvatar(MyApplication.getContext(),holder.left_chatter_image,msg.getId(),"student");
                 holder.leftchatterName.setText(msg.getName());
                 holder.left_chatter_image.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -463,7 +522,8 @@ public class PostsChatActivity extends AppCompatActivity {
             }else if(msg.getType() == Message.TYPE_SENT){
                 holder.rightLayout.setVisibility(View.VISIBLE);
                 holder.leftLayout.setVisibility(View.GONE);
-                holder.right_chatter_image.setImageResource(msg.getImageId());
+                Log.d("ID:::",msg.getId());
+                AvatarUtil.setAvatar(MyApplication.getContext(),holder.right_chatter_image,msg.getId(),"student");
                 holder.rightMsg.setText(msg.getContent());
             }
         }

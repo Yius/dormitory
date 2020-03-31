@@ -1,5 +1,6 @@
 package com.example.xin.dormitory.student;
 
+import android.content.Context;
 import android.content.Intent;
 
 import androidx.annotation.Nullable;
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
@@ -16,6 +18,8 @@ import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.xin.dormitory.Utility.AvatarUtil;
 import com.example.xin.dormitory.Utility.HttpUtil;
 import com.example.xin.dormitory.Utility.MyApplication;
 import com.example.xin.dormitory.R;
@@ -35,6 +40,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 
 import okhttp3.Call;
@@ -77,6 +83,7 @@ public class AlterSelfInfoActivity extends AppCompatActivity {
         ID = findViewById(R.id.ID);
         name = findViewById(R.id.name);
         dormID = findViewById(R.id.dormID);
+
         Intent intent = getIntent();
         et_nickname.setText(intent.getStringExtra("nickname"));
         et_phone.setText(intent.getStringExtra("phone"));
@@ -87,6 +94,7 @@ public class AlterSelfInfoActivity extends AppCompatActivity {
         if(actionBar!=null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        setAvatar(this,iv_avatar,getIntent().getStringExtra("ID"),"student");
         setListeners();
     }
 
@@ -287,11 +295,10 @@ public class AlterSelfInfoActivity extends AppCompatActivity {
         // 设置文件以及文件上传类型封装
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpg"), datas);
 
-        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         // 文件上传的请求体封装
         MultipartBody multipartBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("avatar", "student_"+pref.getString("ID","")+".png", requestBody)
+                .addFormDataPart("avatar", "student_"+getIntent().getStringExtra("ID")+".png", requestBody)
                 .build();
 
         Request request = new Request.Builder()
@@ -328,9 +335,19 @@ public class AlterSelfInfoActivity extends AppCompatActivity {
                             Toast.makeText(MyApplication.getContext(), "图片上传成功！", Toast.LENGTH_SHORT).show();
                         }
                     });
+                    //上传图片成功后保存图片到本地
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AvatarUtil.saveFile(AlterSelfInfoActivity.this,bitmap,"student_"+getIntent().getStringExtra("ID"));
+                        }
+                    });
                 }
             }
         });
+    }
+    private void setAvatar(Context context,ImageView imageView,String ID,String type) {
+       AvatarUtil.setAvatar(context,imageView,ID,type);
     }
 
 

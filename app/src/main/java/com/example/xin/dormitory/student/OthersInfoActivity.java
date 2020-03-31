@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.xin.dormitory.R;
+import com.example.xin.dormitory.Utility.AvatarUtil;
 import com.example.xin.dormitory.Utility.HttpUtil;
 import com.example.xin.dormitory.Utility.MyApplication;
 import com.google.android.material.appbar.AppBarLayout;
@@ -37,6 +38,7 @@ import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.xuexiang.xui.utils.StatusBarUtils;
+import com.xuexiang.xui.widget.imageview.RadiusImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,6 +61,9 @@ public class OthersInfoActivity extends AppCompatActivity {
 
     @BindView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout collapsingToolbarLayout;
+
+    @BindView(R.id.personal_img)
+    RadiusImageView personalImg;
 
     @BindView(R.id.rl_personal_info)
     RelativeLayout relativeLayout;
@@ -136,6 +141,8 @@ public class OthersInfoActivity extends AppCompatActivity {
         id.setText(getIntent().getStringExtra("contactID"));
         dormBelong.setText(getIntent().getStringExtra("contactBelong"));
         personalName.setText(getIntent().getStringExtra("contactName"));
+        //获取头像
+        AvatarUtil.setAvatar(this,personalImg,id.getText().toString(),"student");
     }
     private void initToolbar(){
         setSupportActionBar(toolbar);
@@ -205,7 +212,6 @@ public class OthersInfoActivity extends AppCompatActivity {
                         for(int i=0;i<jsonArray.length();i++){
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             Post post = new Post();
-                            post.setImageId(R.drawable.portrait_s);
                             post.setPosterName(jsonObject.getString("name"));
                             post.setPosterID(jsonObject.getString("ID"));
 //                            String PostsDate = jsonObject.getString("PostsDate").substring(0,10);
@@ -254,6 +260,7 @@ public class OthersInfoActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        initInfo();
                         initPosts();
                         smartRefreshLayout.finishRefresh();
                         smartRefreshLayout.resetNoMoreData();//setNoMoreData(false);
@@ -268,5 +275,11 @@ public class OthersInfoActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         adapter = new PersonalPostAdapter(mPostList,this);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshPosts();
     }
 }

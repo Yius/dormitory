@@ -24,16 +24,14 @@ import okhttp3.Response;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.xin.dormitory.common.LoginActivity;
+import com.example.xin.dormitory.Utility.AvatarUtil;
 import com.example.xin.dormitory.common.TabView;
 import com.example.xin.dormitory.R;
 import com.example.xin.dormitory.Utility.HttpUtil;
@@ -42,6 +40,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.xuexiang.xui.utils.StatusBarUtils;
+import com.xuexiang.xui.widget.imageview.RadiusImageView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -155,6 +154,10 @@ public class MainSActivity extends AppCompatActivity {
                     editor.putString("nickname",jsonObject.getString("nickname"));
                     editor.putString("belong",jsonObject.getString("belong"));
                     editor.apply();
+
+                    //登录后获取头像并保存到本地
+                    AvatarUtil.loadAvatar(jsonObject.getString("ID"),"student");
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -233,7 +236,7 @@ public class MainSActivity extends AppCompatActivity {
                         intent = new Intent(MainSActivity.this,CheckSignNoticesActivity.class);
                         break;
                     case R.id.nav_contact_us:
-                        intent = new Intent(MainSActivity.this,ContactUs.class);
+                        intent = new Intent(MainSActivity.this, AboutUs.class);
                         break;
                     default:
                         break;
@@ -262,10 +265,13 @@ public class MainSActivity extends AppCompatActivity {
         TextView headName = headerLayout.findViewById(R.id.tv_head_name);
         TextView headID = headerLayout.findViewById(R.id.tv_head_id);
         TextView headDormID = headerLayout.findViewById(R.id.tv_head_dormID);
+        RadiusImageView headAvatar = headerLayout.findViewById(R.id.head_avatar);
         SharedPreferences pref = getSharedPreferences("data",MODE_PRIVATE);
         headID.setText(pref.getString("ID",""));
         headDormID.setText(pref.getString("dormID",""));
         headName.setText(pref.getString("name",""));
+        //侧滑头像设置
+        AvatarUtil.loadAvatar(this,headAvatar,headID.getText().toString(),"student");
     }
     private void initData(){
 
@@ -330,5 +336,16 @@ public class MainSActivity extends AppCompatActivity {
                 break;
         }
         return fragment;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                initHead();
+            }
+        });
     }
 }

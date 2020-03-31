@@ -40,7 +40,7 @@
                     android:id="@+id/iv_poster_avatar"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
-                    android:src="@mipmap/ic_launcher"
+                    android:src="@drawable/portrait_s"
                     app:riv_is_circle="true"
                     android:scaleType="centerCrop"/>
                 <LinearLayout
