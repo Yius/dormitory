@@ -77,6 +77,10 @@
             android:parentActivityName=".student.MainSActivity"
             android:theme="@style/PersonalInfoActivityTheme" />
         <activity android:name=".common.LoginActivity">
+
+        </activity>
+        <!--启动页，将LoginActivity的intent-filter移到自己下面-->
+        <activity android:name=".common.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
