@@ -1,7 +1,7 @@
 ﻿<?php
     include_once("connect.php");
     $belong=$_POST['belong'];//APP post过来的学生所属宿舍楼
-    $sql=mysqli_query($conn,"SELECT * FROM announcement WHERE govern LIKE '$belong'");
+    $sql=mysqli_query($conn,"SELECT * FROM announcement WHERE govern LIKE '$belong' ORDER BY Atime DESC");
     $res="[";
     while($result=mysqli_fetch_assoc($sql)){
         $res.=json_encode($result);
