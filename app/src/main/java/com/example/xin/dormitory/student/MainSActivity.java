@@ -273,12 +273,9 @@ public class MainSActivity extends AppCompatActivity {
         //侧滑头像设置
         AvatarUtil.loadAvatar(this,headAvatar,headID.getText().toString(),"student");
     }
-    private void initData(){
-
-    }
 
     private void updateCurrentTab(int index) {
-//        toolbar.setTitle(mTabTitles[index]);
+        toolbar.setTitle(mTabTitles[index]);
         for (int i = 0; i < mTabViews.size(); i++) {
             if (index == i) {
                 mTabViews.get(i).setXPercentage(1);
