@@ -77,11 +77,20 @@ public class DeliverAnnouncementActivity extends AppCompatActivity{
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm::ss");
                     String Atime = formatter.format(new Date(System.currentTimeMillis()));
                     SharedPreferences pref = getSharedPreferences("dataH",MODE_PRIVATE);
+                    //因为MeHFragment那里写的是pref.getString("name", "") + "宿管"
+                    String name = pref.getString("name","");
+//                    name = name.substring(0,name.length()-2);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MyApplication.getContext(),name,Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     OkHttpClient client = new OkHttpClient();
                     if(content.equals("")||title.equals("")){
                         Toast.makeText(MyApplication.getContext(), "标题和内容不能为空", Toast.LENGTH_SHORT).show();
                     }else {
-                        RequestBody requestBody = new FormBody.Builder().add("houseparentID", pref.getString("ID", "")).add("govern",pref.getString("govern","")).add("Atime", Atime).add("title", title).add("content", content).build();
+                        RequestBody requestBody = new FormBody.Builder().add("houseparentID", pref.getString("ID", "")).add("govern",pref.getString("govern","")).add("Atime", Atime).add("title", title).add("content", content).add("houseparentName",name).build();
                         //服务器地址，ip地址需要时常更换
                         String address = HttpUtil.address + "createAnnouncement.php";
                         Request request = new Request.Builder().url(address).post(requestBody).build();

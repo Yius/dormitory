@@ -19,6 +19,7 @@ public class Announcement implements Serializable {
     private String houseparentID;
     private String content;
     private String govern;
+    private String houseparentName;
 
     public Announcement(JSONObject jsonObject){
         try {
@@ -28,6 +29,7 @@ public class Announcement implements Serializable {
             this.houseparentID = jsonObject.getString("houseparentID");
             this.content = jsonObject.getString("content");
             this.govern = jsonObject.getString("govern");
+            this.houseparentName = jsonObject.getString("houseparentName");
         }catch (Exception e){
             e.printStackTrace();
 //            Toast.makeText(MyApplication.getContext(), "初始化出错", Toast.LENGTH_SHORT).show();
@@ -56,6 +58,10 @@ public class Announcement implements Serializable {
 
     public String getGovern(){
         return govern;
+    }
+
+    public String getHouseparentName(){
+        return houseparentName;
     }
 
 }

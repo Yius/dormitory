@@ -35,7 +35,7 @@ public class CheckAnnouncementDetailsActivity extends AppCompatActivity {
     private TextView tv_Atime;
     private TextView tv_content;
     private TextView tv_ID;
-    private TextView tv_houseparentID;
+    private TextView tv_houseparentName;
     private Announcement announcement;
 
 
@@ -59,13 +59,13 @@ public class CheckAnnouncementDetailsActivity extends AppCompatActivity {
         tv_content = findViewById(R.id.tv_content);
         tv_content.setMovementMethod(new ScrollingMovementMethod());
         tv_title = findViewById(R.id.tv_title);
-        tv_houseparentID = findViewById(R.id.tv_houseparentID);
+        tv_houseparentName = findViewById(R.id.tv_houseparentName);
         announcement = (Announcement) getIntent().getSerializableExtra("announcement_data");
         tv_ID.setText(String.valueOf(announcement.getID()));
         tv_title.setText(announcement.getTitle());
         tv_content.setText(announcement.getContent());
         tv_Atime.setText(announcement.getAtime());
-        tv_houseparentID.setText(announcement.getHouseparentID());
+        tv_houseparentName.setText(announcement.getHouseparentName());
         //setListeners();
 
     }
