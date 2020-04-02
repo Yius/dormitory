@@ -281,7 +281,7 @@ public class SelfInfoHActivity extends AppCompatActivity {
         // 设置文件以及文件上传类型封装
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpg"), datas);
 
-        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences("dataH", MODE_PRIVATE);
         // 文件上传的请求体封装
         MultipartBody multipartBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
