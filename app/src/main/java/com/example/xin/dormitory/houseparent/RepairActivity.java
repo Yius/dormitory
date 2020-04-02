@@ -250,6 +250,8 @@ public class RepairActivity extends AppCompatActivity {
     }
 
     private void generateExcel() {
+        //先清空以防止导出的数据重复
+        repairList.clear();
         SharedPreferences preff = getSharedPreferences("dataH", MODE_PRIVATE);
         OkHttpClient clientt = new OkHttpClient();
         RequestBody requestBody = new FormBody.Builder().add("which", "2").add("govern", preff.getString("govern", "")).build();
