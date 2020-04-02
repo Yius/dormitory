@@ -134,6 +134,7 @@ public class DepartRegisterActivity extends AppCompatActivity {
                     String backTime = tv_backTime.getText().toString();
                     String contact = et_contact1.getText().toString();
                     String belong = pref.getString("belong", "");
+                    String name = pref.getString("name","");
                     OkHttpClient client = new OkHttpClient();
                     if(departCause.equals("")||departTime.equals("")||backTime.equals("")||contact.equals("")){
                         Toast.makeText(MyApplication.getContext(), "所有内容都为必填", Toast.LENGTH_SHORT).show();
@@ -142,7 +143,7 @@ public class DepartRegisterActivity extends AppCompatActivity {
                     }else{
                         RequestBody requestBody = new FormBody.Builder().add("registerDate", registerDate).add("ID",ID)
                                 .add("dormID", dormID).add("departCause", departCause).add("departTime", departTime)
-                                .add("backTime", backTime).add("contact",contact).add("belong",belong).build();
+                                .add("backTime", backTime).add("contact",contact).add("belong",belong).add("name",name).build();
                         //服务器地址，ip地址需要时常更换
                         String address = HttpUtil.address + "departRegister.php";
                         Request request = new Request.Builder().url(address).post(requestBody).build();

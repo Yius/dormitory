@@ -131,6 +131,7 @@ public class StayRegisterActivity extends AppCompatActivity {
                     String endDate = tv_endDate.getText().toString();
                     String contact = et_contact2.getText().toString();
                     String belong = pref.getString("belong", "");
+                    String name = pref.getString("name","");
                     OkHttpClient client = new OkHttpClient();
 
                     if(startDate.equals("")||endDate.equals("")||contact.equals("")){
@@ -140,7 +141,7 @@ public class StayRegisterActivity extends AppCompatActivity {
                     }else{
                         RequestBody requestBody = new FormBody.Builder().add("registerDate", registerDate).add("ID",ID)
                                 .add("dormID", dormID).add("startDate", startDate).add("endDate", endDate)
-                                .add("contact",contact).add("belong",belong).build();
+                                .add("contact",contact).add("belong",belong).add("name",name).build();
                         //服务器地址，ip地址需要时常更换
                         String address = HttpUtil.address + "stayRegister.php";
                         Request request = new Request.Builder().url(address).post(requestBody).build();

@@ -1,13 +1,14 @@
 <?php
     include_once("connect.php");
-    $registerDate=$_POST['registerDate'];//APP post¹ýÀ´µÄÌá½»Ê±¼ä
-    $ID=$_POST['ID'];//APP post¹ýÀ´µÄÑ§ÉúID
-    $dormID=$_POST['dormID'];//APP post¹ýÀ´µÄËÞÉáºÅ
-    $startDate=$_POST['startDate'];//APP post¹ýÀ´µÄÁôËÞ¿ªÊ¼Ê±¼ä
-    $endDate=$_POST['endDate'];//APP post¹ýÀ´µÄÁôËÞ½áÊøÊ±¼ä
-    $contact=$_POST['contact'];//APP post¹ýÀ´µÄÁªÏµ·½Ê½
-    $belong=$_POST['belong'];//APP post¹ýÀ´µÄËÞÉáÂ¥
-    $result=mysqli_query($conn,"INSERT INTO stayinfo(registerDate,ID,dormID,startDate,endDate,contact,belong) VALUES('$registerDate','$ID','$dormID','$startDate','$endDate','$contact','$belong')");
+    $registerDate=$_POST['registerDate'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á½»Ê±ï¿½ï¿½
+    $ID=$_POST['ID'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ§ï¿½ï¿½ID
+    $dormID=$_POST['dormID'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    $startDate=$_POST['startDate'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¿ï¿½Ê¼Ê±ï¿½ï¿½
+    $endDate=$_POST['endDate'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+    $contact=$_POST['contact'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½Ê½
+    $belong=$_POST['belong'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¥
+    $name=$_POST['name'];//APP postè¿‡æ¥çš„name
+    $result=mysqli_query($conn,"INSERT INTO stayinfo(registerDate,ID,dormID,startDate,endDate,contact,belong,name) VALUES('$registerDate','$ID','$dormID','$startDate','$endDate','$contact','$belong','$name')");
      if($result){
        $back['status']="11";
        $back['info']="commit success";
