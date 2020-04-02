@@ -108,7 +108,7 @@
                     android:id="@+id/govern"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="所管宿舍"
+                    android:text="所管宿舍楼"
                     android:textSize="18sp"
                     android:textColor="#000"
                     android:textStyle="bold"/>
@@ -133,7 +133,7 @@
                     android:id="@+id/ID"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="宿管号"
+                    android:text="宿管编号"
                     android:textSize="18sp"
                     android:textColor="#000"
                     android:textStyle="bold"/>
