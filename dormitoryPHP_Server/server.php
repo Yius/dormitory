@@ -1,7 +1,8 @@
 <?php
 //用cmd运行该文件，找到相应目录，写上php server.php,
 //并且要关掉防火墙(找不到不关防火墙的方法...) Yu:不用也行
-$host = '172.18.180.191';
+// $host = '172.18.209.166';
+$host = '172.18.209.166';
 $port = 8889;
 $servsocket = socket_create(AF_INET,SOCK_STREAM, SOL_TCP);
 if(FALSE ===$servsocket){

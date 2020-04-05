@@ -1,11 +1,12 @@
 <?php
     include_once("connect.php");
-    $Atime=$_POST['Atime'];//APP post¹ýÀ´µÄ·¢²¼ÈÕÆÚ
-    $houseparentID=$_POST['houseparentID'];//APP post¹ýÀ´µÄËÞ¹ÜºÅ
-    $govern=$_POST['govern'];//APP post¹ýÀ´µÄËÞ¹ÜËù¹ÜÂ¥ºÅ
-    $content=$_POST['content'];//APP post¹ýÀ´µÄ·¢²¼ÄÚÈÝ
-    $title=$_POST['title'];//APP post¹ýÀ´µÄ·¢²¼±êÌâ
-    $result=mysqli_query($conn,"INSERT INTO announcement (Atime,houseparentID,content,title,govern) VALUES('$Atime','$houseparentID','$content','$title','$govern')");
+    $Atime=$_POST['Atime'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    $houseparentID=$_POST['houseparentID'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¹Üºï¿½
+    $govern=$_POST['govern'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¹ï¿½ï¿½ï¿½ï¿½ï¿½Â¥ï¿½ï¿½
+    $content=$_POST['content'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    $title=$_POST['title'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    $houseparentName=$_POST['houseparentName'];//APP postè¿‡æ¥çš„hosueparentName
+    $result=mysqli_query($conn,"INSERT INTO announcement (Atime,houseparentID,content,title,govern,houseparentName) VALUES('$Atime','$houseparentID','$content','$title','$govern','$houseparentName')");
      if($result){
        $back['status']="7";
        $back['info']="announce success";

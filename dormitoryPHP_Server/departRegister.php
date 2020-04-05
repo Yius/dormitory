@@ -1,14 +1,15 @@
 <?php
     include_once("connect.php");
-    $registerDate=$_POST['registerDate'];//APP post¹ýÀ´µÄÌá½»Ê±¼ä
-    $ID=$_POST['ID'];//APP post¹ýÀ´µÄÑ§ÉúID
-    $dormID=$_POST['dormID'];//APP post¹ýÀ´µÄËÞÉáºÅ
-    $departCause=$_POST['departCause'];//APP post¹ýÀ´µÄÀëËÞÔ­Òò
-    $departTime=$_POST['departTime'];//APP post¹ýÀ´µÄÀëËÞÊ±¼ä
-    $backTime=$_POST['backTime'];//APP post¹ýÀ´µÄ·µËÞÊ±¼ä
-    $contact=$_POST['contact'];//APP post¹ýÀ´µÄÁªÏµ·½Ê½
-    $belong=$_POST['belong'];//APP post¹ýÀ´µÄËÞÉáÂ¥
-    $result=mysqli_query($conn,"INSERT INTO departinfo(registerDate,ID,dormID,departCause,departTime,backTime,contact,belong) VALUES('$registerDate','$ID','$dormID','$departCause','$departTime','$backTime','$contact','$belong')");
+    $registerDate=$_POST['registerDate'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á½»Ê±ï¿½ï¿½
+    $ID=$_POST['ID'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ§ï¿½ï¿½ID
+    $dormID=$_POST['dormID'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    $departCause=$_POST['departCause'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô­ï¿½ï¿½
+    $departTime=$_POST['departTime'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+    $backTime=$_POST['backTime'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+    $contact=$_POST['contact'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½Ê½
+    $belong=$_POST['belong'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¥
+    $name=$_POST['name'];//APP postè¿‡æ¥çš„name
+    $result=mysqli_query($conn,"INSERT INTO departinfo(registerDate,ID,dormID,departCause,departTime,backTime,contact,belong,name) VALUES('$registerDate','$ID','$dormID','$departCause','$departTime','$backTime','$contact','$belong','$name')");
      if($result){
        $back['status']="10";
        $back['info']="commit success";

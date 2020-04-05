@@ -1,15 +1,19 @@
 <?php
     include_once("connect.php");
-    $Rtime=$_POST['Rtime'];//APP post¹ýÀ´µÄÇ©µ½ÈÕÆÚ
-    $houseparentID=$_POST['houseparentID'];//APP post¹ýÀ´µÄËÞ¹ÜºÅ
-    $title=$_POST['title'];//APP post¹ýÀ´µÄÇ©µ½±êÌâ
-    $govern=$_POST['govern'];//APP post¹ýÀ´µÄËÞ¹Ü¹ÜÀíµÄÂ¥ºÅ
+    $Rtime=$_POST['Rtime'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    $houseparentID=$_POST['houseparentID'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¹Üºï¿½
+    $title=$_POST['title'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    $govern=$_POST['govern'];//APP postï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¹Ü¹ï¿½ï¿½ï¿½ï¿½ï¿½Â¥ï¿½ï¿½
+    $latitude=(double)$_POST['latitude'];//APP postè¿‡æ¥çš„çº¬åº¦
+    $longitude=(double)$_POST['longitude'];//APP postè¿‡æ¥çš„ç»åº¦
+    $detailAddress=$_POST['detailAddress'];//APP postè¿‡æ¥çš„ç»åº¦  
+    $houseparentName=$_POST['houseparentName'];//APP postè¿‡æ¥çš„ç»åº¦ 
     $sql=mysqli_query($conn,"SELECT COUNT(*) as 'totalnums' FROM userinfo WHERE belong LIKE '$govern'");
     $totalnums=0;
     if($result=mysqli_fetch_assoc($sql)){
         $totalnums=$result['totalnums'];
     }
-    $result=mysqli_query($conn,"INSERT INTO signrecord (Rtime,houseparentID,title,govern,totalnums) VALUES('$Rtime','$houseparentID','$title','$govern','$totalnums')");
+    $result=mysqli_query($conn,"INSERT INTO signrecord (Rtime,houseparentID,title,govern,totalnums,latitude,longitude,detailAddress,houseparentName) VALUES('$Rtime','$houseparentID','$title','$govern','$totalnums','$latitude','$longitude','$detailAddress','$houseparentName')");
      if($result){
        $back['status']="13";
        $back['info']="start a new sign success";
